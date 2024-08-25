@@ -17,12 +17,16 @@ export default function Navbar() {
           Logo.
         </Link>
 
-        {/* Desktop Menu Links */}
-        <div className="hidden md:flex gap-4">
-          <Link to="/home" className="hover:underline">
-            Home
+        <div className="flex gap-4">
+          <Link to="/loading" className="hover:underline">
+            Loading
           </Link>
-          {/* Additional links can go here */}
+          <Link to="/admin" className="hover:underline">
+            Admin
+          </Link>
+          <Link to="/random-number" className="hover:underline">
+            Random
+          </Link>
         </div>
 
         {/* Hamburger Menu Button */}
