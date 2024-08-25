@@ -8,8 +8,14 @@ export default function Navbar() {
         <Link to="/">Logo.</Link>
 
         <div className="flex gap-4">
-          <Link to="/home" className="hover:underline">
+          <Link to="/loading" className="hover:underline">
             Loading
+          </Link>
+          <Link to="/admin" className="hover:underline">
+            Admin
+          </Link>
+          <Link to="/random-number" className="hover:underline">
+            Random
           </Link>
         </div>
       </div>
