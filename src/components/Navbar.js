@@ -27,6 +27,9 @@ export default function Navbar() {
           <Link to="/random-number" className="hover:underline">
             Random
           </Link>
+          <Link to="/signIn" className="hover:underline">
+            signIn
+          </Link>
         </div>
 
         {/* Hamburger Menu Button */}

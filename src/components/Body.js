@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Body() {
   return (
@@ -26,9 +27,11 @@ export default function Body() {
 
         {/* Call to Action Section */}
         <div className="mt-8 text-center">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
-            Get Started
-          </button>
+          <Link to="/get-started">
+            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
+              Get Started
+            </button>
+          </Link>
         </div>
         
       </div>
