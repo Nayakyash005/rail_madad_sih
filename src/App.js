@@ -10,6 +10,10 @@ import AdminLayout from "./pages/admin/Layout";
 import Dashboard from "./pages/admin/Dashboard";
 import RandomNumber from "./pages/home/random";
 import { wait } from "./lib/utils";
+import SignUp from "./components/SignUp";
+import GetStartedPage from "./components/GetStarted";
+import Signin from "./pages/home/auth/Signin";
+import Signup from "./pages/home/auth/Signup";
 
 const router = createBrowserRouter([
   {
@@ -26,14 +30,26 @@ const router = createBrowserRouter([
         element: <LoadingSpinner />,
       },
       {
+        path: "get-started", 
+        element: <GetStartedPage />,
+      },
+      {
         path: "random-number/",
         element: <RandomNumber />,
         loader: ({ params, request }) => {
-          console.log({params, request});
-          return {response: wait(1000, Math.random() * 100)};
+          console.log({ params, request });
+          return { response: wait(1000, Math.random() * 100) };
         },
       },
     ],
+  },
+  {
+    path: "auth/signin",
+    element: <Signin />,
+  },
+  {
+    path: "auth/signup",
+    element: <Signup />,
   },
   {
     path: "admin",
