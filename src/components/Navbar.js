@@ -27,9 +27,15 @@ export default function Navbar() {
           <Link to="/random-number" className="hover:underline">
             Random
           </Link>
-          <Link to="/auth/signin" className="hover:underline">
-            signIn
-          </Link>
+          <p className="space-x-1.5">
+            <Link to="/auth/signin" className="hover:underline">
+              Login
+            </Link>
+            <span>or</span>
+            <Link to="/auth/signup" className="hover:underline">
+              Signup
+            </Link>
+          </p>
         </div>
 
         {/* Hamburger Menu Button */}

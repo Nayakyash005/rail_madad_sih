@@ -6,7 +6,7 @@ export default function Signup() {
   return (
     <main
       style={{ background: `url(${BG_URL})` }}
-      className="min-h-screen w-full bg-cover bg-fixed bg-center bg-no-repeat flex items-center justify-center"
+      className="min-h-screen w-full p-4 bg-cover bg-fixed bg-center bg-no-repeat flex items-center justify-center"
     >
       <div className="flex w-full max-w-md flex-col rounded-2xl border bg-white text-black p-10 shadow-2xl">
         <a
