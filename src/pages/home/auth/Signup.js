@@ -1,6 +1,7 @@
 import React from "react";
 import { BG_URL } from "./Signin";
 import { Link } from "react-router-dom";
+import { Button } from "../../../components/ui/Button";
 
 export default function Signup() {
   return (
@@ -58,16 +59,15 @@ export default function Signup() {
               <input
                 type="text"
                 placeholder="Enter mobile number"
-                autofocus
                 required
                 className="w-full p-3 rounded border border-zinc-200 focus:border-black focus:outline-none"
               />
             </div>
           </label>
 
-          <button className="bg-zinc-800 mt-2 hover:bg-black p-2 font-semibold rounded text-white">
+          <Button className="mt-2 font-semibold">
             Submit
-          </button>
+          </Button>
         </form>
 
         <Link className="mx-auto p-2 mb-4 hover:underline" to="/auth/signin">

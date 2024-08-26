@@ -17,7 +17,7 @@ export default function Navbar() {
           Logo.
         </Link>
 
-        <div className="flex gap-4">
+        <div className="hidden sm:flex gap-4">
           <Link to="/loading" className="hover:underline">
             Loading
           </Link>
@@ -61,6 +61,15 @@ export default function Navbar() {
             >
               Home
             </Link>
+            <p className="px-4 py-2 space-x-1.5">
+              <Link to="/auth/signin" className="hover:underline">
+                Login
+              </Link>
+              <span>or</span>
+              <Link to="/auth/signup" className="hover:underline">
+                Signup
+              </Link>
+            </p>
             {/* Additional mobile links can go here */}
           </div>
         </div>

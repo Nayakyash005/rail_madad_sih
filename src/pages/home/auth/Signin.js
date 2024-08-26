@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "../../../components/ui/Button";
 
 export const BG_URL =
   "https://railmadad.indianrailways.gov.in/madad/final/images/body-bg.jpg";
@@ -42,7 +43,10 @@ export default function Signin() {
               />
             </div>
           </label>
-          <button className="bg-zinc-800 hover:bg-black p-2 font-semibold rounded text-white">Get OTP</button>
+          
+          <Button className="mt-2 font-semibold">
+            Get OTP
+          </Button>
         </form>
 
         <Link className="mx-auto p-2 mb-4 hover:underline" to="/auth/signup">Signup?</Link>
