@@ -6,12 +6,38 @@ import { toast } from "react-toastify";
 export const BG_URL =
   "https://railmadad.indianrailways.gov.in/madad/final/images/body-bg.jpg";
 
+async function requestOTP(phone) {
+  // try {
+  //   const response = await fetch(
+  //     `${process.env.REACT_APP_SERVER_URL}/api/auth/send-otp`,
+  //     {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ phone }),
+  //     }
+  //   ).then((res) => res.json());
+    
+  //   return !!response.success;
+  // } catch (error) {
+  //   toast.error("something went wrong");
+  //   console.log(error);
+  //   return false;
+  // }
+
+  return true;
+}
+
 export default function Signin() {
   const [phone, setPhone] = useState('');
-  const [showOtpScreen, setShowOtpScreen] = useState(false);
+  const [isOtpSent, setIsOtpSent] = useState(false);
 
-  function hideOtpScreen() {
-    setShowOtpScreen(false);
+  function closeOtpScreen() {
+    setIsOtpSent(false);
+  }
+
+  function handlePhoneSubmit(phone) {
+    setPhone(phone);
+    setIsOtpSent(true);
   }
 
   return (
@@ -34,13 +60,10 @@ export default function Signin() {
           Log in
         </h2>
 
-        {showOtpScreen ? (
-          <OtpForm
-            data={{phone}}
-            goBack={hideOtpScreen}
-          />
+        {isOtpSent ? (
+          <OtpForm data={{phone}} goBack={closeOtpScreen} />
         ) : (
-          <LoginForm phone={phone} setPhone={setPhone} setShowOtpScreen={setShowOtpScreen} />
+          <LoginForm data={phone} setData={handlePhoneSubmit} />
         )}
 
         <Link className="mx-auto p-2 mb-4 hover:underline" to="/auth/signup">
@@ -59,7 +82,8 @@ export default function Signin() {
   );
 }
 
-function LoginForm({ phone, setPhone, setShowOtpScreen }) {
+function LoginForm({ data, setData }) {
+  const [phone, setPhone] = useState(data);
   const [isLoading, setIsLoading] = useState(false);
 
   function handlePhoneChange(e) {
@@ -77,30 +101,18 @@ function LoginForm({ phone, setPhone, setShowOtpScreen }) {
 
   async function getOTP(e) {
     e.preventDefault();
+    setIsLoading(true);
 
-    try {
-      setIsLoading(true);
-      // const response = await fetch(
-      //   `${process.env.REACT_APP_SERVER_URL}/api/auth/send-otp`,
-      //   {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify({ phone }),
-      //   }
-      // ).then((res) => res.json());
-      // console.log(response);
-      // if (response.success) {
-      setShowOtpScreen(phone);
-      //   toast.success(response.message);
-      // } else {
-      //   toast.error(response.message);
-      // }
-    } catch (error) {
+    const success = await requestOTP(phone);
+
+    if(success) {
+      toast.success("OTP sent");
+      setData(phone);
+    } else {
       toast.error("something went wrong");
-      console.log(error);
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   }
 
   return (
@@ -198,14 +210,14 @@ function OtpForm({ data, goBack }) {
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/auth/verify-otp`,{
         method: "POST",
         headers: {"Content-Type": 'application/json'},
-        body: JSON.stringify({...data, otp: OTP}),
+        body: JSON.stringify({...data, otp}),
       }).then(res => res.json());
       
       if(response.success) {
         toast.success(response.message);
+        setError(false);
       } else {
         setError(response?.message || "An unexpected error occcured");
-        allowResendOtp();
       }
 
     } catch (error) {
@@ -216,23 +228,33 @@ function OtpForm({ data, goBack }) {
     }
   }
 
+  async function getOTP() {
+    const success = await requestOTP(data.phone);
+    
+    if(success) {
+      toast.success("OTP sent");
+      allowResendOtp();
+    } else {
+      toast.error("something went wrong");
+    }
+  }
+
   return (
     <form
       onSubmit={verifyOTP}
       method="POST"
-      className="mb-4 flex flex-col gap-5"
+      className="mb-4 space-y-5"
     >
       <label>
         <h6 className="text-center mb-4 text-sm text-gray-600">
           Enter OTP sent to <br />
           <b>{data.phone}</b> or{" "}
-          <button
-            className="hover:underline"
-            type="button"
+          <a
+            className="hover:underline font-bold p-0 m-0"
             onClick={goBack}
           >
-            <b>change</b>
-          </button>
+            change?
+          </a>
         </h6>
         <div className="grid gap-2 grid-cols-6 items-center justify-center relative w-full rounded bg-white">
           <input
@@ -281,16 +303,18 @@ function OtpForm({ data, goBack }) {
         </div>
       </label>
 
-      {error && <p className="text-red-600">{error}</p>}
+      {error && <p className="text-red-600 text-sm">{error}</p>}
 
-      <Button disabled={isLoading} className="mt-2 font-semibold">
+      <Button disabled={isLoading} className="mt-2 w-full font-semibold">
         {isLoading ? "Veriefying OTP" : "Veriefy"}
       </Button>
 
       {error && (
         <button
-          className="disabled:opacity-50 disabled:cursor-not-allowed"
+          className="disabled:opacity-50 disabled:cursor-not-allowed block mx-auto"
           disabled={waitTime > 0}
+          type="button"
+          onClick={getOTP}
         >
           <b>Resend OTP? </b>
           {waitTime > 0 ? <span>in {waitTime}s</span> : ""}
