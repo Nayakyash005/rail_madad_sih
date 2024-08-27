@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -14,6 +15,7 @@ import SignUp from "./components/SignUp";
 import GetStartedPage from "./components/GetStarted";
 import Signin from "./pages/home/auth/Signin";
 import Signup from "./pages/home/auth/Signup";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
         element: <LoadingSpinner />,
       },
       {
-        path: "get-started", 
+        path: "get-started",
         element: <GetStartedPage />,
       },
       {
@@ -65,5 +67,19 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        theme="dark"
+        rtl={false}
+        draggable
+      />
+    </>
+  );
 }
