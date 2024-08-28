@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { BG_URL } from "./Signin";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
+import OtpForm from "./OTPform";
+import { wait } from "../../../lib/utils";
 
 export default function Signup() {
+  const [data, setData] = useState();
+  const [showOtp, setShowOtp] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleSubmit(data) {
+    console.log(data);
+
+    setData(data);
+    setShowOtp(true);
+
+    return null;
+  }
+
+  async function Handle_otp_submit(otp) {
+    console.log({data, otp});
+    // TODO: request backend to veriefy otp, create user, login user.
+
+    await wait(1000);
+
+    if(otp !== '123456') {
+      return "wrong otp";
+    }
+
+    navigate("/", {replace: true});
+  }
+
   return (
     <main
       style={{ background: `url(${BG_URL})` }}
@@ -24,51 +52,7 @@ export default function Signup() {
           Signup
         </h2>
 
-        <form
-          action="api/auth/signup?redirect=/"
-          method="POST"
-          className="mb-4 flex flex-col gap-4"
-        >
-          <label>
-            <h6 className="mb-1 text-sm text-gray-600">First name</h6>
-            <div className="relative w-full rounded bg-white">
-              <input
-                className="w-full p-3 rounded border border-zinc-200 focus:border-black focus:outline-none"
-                placeholder="Enter first name"
-                type="text"
-                required
-              />
-            </div>
-          </label>
-
-          <label>
-            <h6 className="mb-1 text-sm text-gray-600">Last name</h6>
-            <div className="relative w-full rounded bg-white">
-              <input
-                className="w-full p-3 rounded border border-zinc-200 focus:border-black focus:outline-none"
-                placeholder="Enter last name"
-                type="text"
-                required
-              />
-            </div>
-          </label>
-
-          <label>
-            <h6 className="mb-1 text-sm text-gray-600">Mobile number</h6>
-            <div className="relative w-full rounded bg-white">
-              <input
-                type="text"
-                placeholder="Enter mobile number"
-                required
-                className="w-full p-3 rounded border border-zinc-200 focus:border-black focus:outline-none"
-              />
-            </div>
-          </label>
-
-          <Button className="mt-2 font-semibold">
-            Submit
-          </Button>
-        </form>
+        {showOtp ? <OtpForm phone={data.phone} onChangePhoneClick={() => setShowOtp(false)} onSubmit={Handle_otp_submit} /> : <SignUpForm onSubmit={handleSubmit} />}
 
         <Link className="mx-auto p-2 mb-4 hover:underline" to="/auth/signin">
           Log in?
@@ -83,5 +67,104 @@ export default function Signup() {
         </p>
       </div>
     </main>
+  );
+}
+
+/**
+ * @param {{
+ * defaultData: {
+*   firstName: string,
+*   lastName: string,
+*   phone: string,
+* }
+ * onSubmit({
+ *   firstName: string,
+ *   lastName: string,
+ *   phone: string,
+ * }) => Promise<void>}}param0 
+ * @returns 
+ */
+function SignUpForm({
+  defaultData = {
+    firstName: "",
+    lastName: "",
+    phone: "",
+  },
+  onSubmit,
+}) {
+  const [data, setData] = useState(defaultData);
+  const [loading, setLoading] = useState(false);
+  const [error, seterror] = useState(false);
+
+  function HandleChange(e) {
+    setData(p => ({...p, [e.target.name]: e.target.value}));
+  }
+
+  async function HandleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    const error = await onSubmit(data);
+    if(error) {
+      seterror(error);
+    }
+
+    setLoading(false);
+  }
+
+  return (
+    <form
+      className="mb-4 flex flex-col gap-4"
+      onSubmit={HandleSubmit}
+    >
+      <label>
+        <h6 className="mb-1 text-sm text-gray-600">First name</h6>
+        <div className="relative w-full rounded bg-white">
+          <input
+            className="w-full p-3 rounded border border-zinc-200 focus:border-black focus:outline-none"
+            placeholder="Enter first name"
+            name="firstName"
+            value={data.firstName}
+            type="text"
+            onChange={HandleChange}
+            required
+            />
+        </div>
+      </label>
+
+      <label>
+        <h6 className="mb-1 text-sm text-gray-600">Last name</h6>
+        <div className="relative w-full rounded bg-white">
+          <input
+            className="w-full p-3 rounded border border-zinc-200 focus:border-black focus:outline-none"
+            placeholder="Enter last name"
+            name="lastName"
+            value={data.lastName}
+            type="text"
+            onChange={HandleChange}
+            required
+          />
+        </div>
+      </label>
+
+      <label>
+        <h6 className="mb-1 text-sm text-gray-600">Mobile number</h6>
+        <div className="relative w-full rounded bg-white">
+          <input
+            className="w-full p-3 rounded border border-zinc-200 focus:border-black focus:outline-none"
+            placeholder="Enter mobile number"
+            name="phone"
+            value={data.phone}
+            type="text"
+            onChange={HandleChange}
+            required
+          />
+        </div>
+      </label>
+      
+      {error && <p className="text-red-600 text-sm">{error}</p>}
+
+      <Button disabled={loading} className="mt-2 font-semibold">Submit</Button>
+    </form>
   );
 }
