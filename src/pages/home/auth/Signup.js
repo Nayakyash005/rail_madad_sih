@@ -3,10 +3,12 @@ import { BG_URL } from "./Signin";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import OtpForm from "./OTPform";
+import { wait } from "../../../lib/utils";
 
 export default function Signup() {
   const [data, setData] = useState();
   const [showOtp, setShowOtp] = useState(false);
+  const navigate = useNavigate();
 
   async function handleSubmit(data) {
     console.log(data);
@@ -19,8 +21,15 @@ export default function Signup() {
 
   async function Handle_otp_submit(otp) {
     console.log({data, otp});
+    // TODO: request backend to veriefy otp, create user, login user.
 
-    return "no error lol";
+    await wait(1000);
+
+    if(otp !== '123456') {
+      return "wrong otp";
+    }
+
+    navigate("/", {replace: true});
   }
 
   return (
