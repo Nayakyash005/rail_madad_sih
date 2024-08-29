@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { SessionContext } from "../context/Session";
 
-function LogoutBtn({ children }) {
+/** @param {import("react").HTMLAttributes<HTMLButtonElement>} param0 */
+function LogoutBtn({ children, ...props }) {
   const { revalidateSession } = useContext(SessionContext);
 
   async function HandleSubmit() {
@@ -11,7 +12,12 @@ function LogoutBtn({ children }) {
     });
     await revalidateSession();
   }
-  return <button onClick={HandleSubmit}>{children}</button>;
+
+  return (
+    <button {...props} onClick={HandleSubmit}>
+      {children}
+    </button>
+  );
 }
 
 export default LogoutBtn;
