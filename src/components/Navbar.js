@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SessionContext } from "../context/Session";
+import LogoutBtn from "./LogoutBtn";
 
 export default function Navbar() {
   // State to manage the visibility of the mobile menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const session = useContext(SessionContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -27,15 +30,22 @@ export default function Navbar() {
           <Link to="/random-number" className="hover:underline">
             Random
           </Link>
-          <p className="space-x-1.5">
-            <Link to="/auth/signin" className="hover:underline">
-              Login
-            </Link>
-            <span>or</span>
-            <Link to="/auth/signup" className="hover:underline">
-              Signup
-            </Link>
-          </p>
+          {session.user ? (
+            <p className="space-x-1.5">
+            <Link to="/profile">{session.user.firstName}</Link>
+            <LogoutBtn>logout</LogoutBtn>
+            </p>
+          ) : (
+            <p className="space-x-1.5">
+              <Link to="/auth/signin" className="hover:underline">
+                Login
+              </Link>
+              <span>or</span>
+              <Link to="/auth/signup" className="hover:underline">
+                Signup
+              </Link>
+            </p>
+          )}
         </div>
 
         {/* Hamburger Menu Button */}

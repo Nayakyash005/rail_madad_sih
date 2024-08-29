@@ -3,14 +3,14 @@ import { BG_URL } from "./Signin";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import OtpForm from "./OTPform";
-import { wait } from "../../../lib/utils";
+import { toast } from "react-toastify";
 
 export default function Signup() {
   const [data, setData] = useState();
   const [showOtp, setShowOtp] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSubmit(data) {
+  async function saveData(data) {
     console.log(data);
 
     setData(data);
@@ -22,14 +22,25 @@ export default function Signup() {
   async function Handle_otp_submit(otp) {
     console.log({data, otp});
     // TODO: request backend to veriefy otp, create user, login user.
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/auth/signup`, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({...data, otp}),
+      credentials: "include",
+    })
+    .then(res => res.json())
+    .catch(err => {
+      console.log(err);
+      return {success: false, message: "something went wrong"};
+    });
 
-    await wait(1000);
+    console.log(response);
 
-    if(otp !== '123456') {
-      return "wrong otp";
+    if(response.success) {
+      navigate("/", {replace: true});
+    } else {
+      toast.error(response.message);
     }
-
-    navigate("/", {replace: true});
   }
 
   return (
@@ -52,7 +63,7 @@ export default function Signup() {
           Signup
         </h2>
 
-        {showOtp ? <OtpForm phone={data.phone} onChangePhoneClick={() => setShowOtp(false)} onSubmit={Handle_otp_submit} /> : <SignUpForm onSubmit={handleSubmit} />}
+        {showOtp ? <OtpForm phone={data.phone} onChangePhoneClick={() => setShowOtp(false)} onSubmit={Handle_otp_submit} /> : <SignUpForm defaultData={data} onSubmit={saveData} />}
 
         <Link className="mx-auto p-2 mb-4 hover:underline" to="/auth/signin">
           Log in?

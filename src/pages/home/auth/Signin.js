@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import { toast } from "react-toastify";
 import OtpForm from "./OTPform";
+import { SessionContext } from "../../../context/Session";
 
 export const BG_URL =
   "https://railmadad.indianrailways.gov.in/madad/final/images/body-bg.jpg";
@@ -31,6 +32,7 @@ export async function requestOTP(phone) {
 export default function Signin() {
   const [phone, setPhone] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const {revalidateSession} = useContext(SessionContext);
 
   const redirect = useNavigate();
 
@@ -45,13 +47,15 @@ export default function Signin() {
 
   async function handle_OTP_submit(otp) {
     try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/auth/verify-otp`,{
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/auth/signin`,{
         method: "POST",
         headers: {"Content-Type": 'application/json'},
         body: JSON.stringify({phone, otp}),
+        credentials: "include",
       }).then(res => res.json());
 
       if(response.success) {
+        await revalidateSession();
         redirect("/", {replace: true});
         return null;
       } else {

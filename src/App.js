@@ -11,11 +11,12 @@ import AdminLayout from "./pages/admin/Layout";
 import Dashboard from "./pages/admin/Dashboard";
 import RandomNumber from "./pages/home/random";
 import { wait } from "./lib/utils";
-import SignUp from "./components/SignUp";
+
 import GetStartedPage from "./components/GetStarted";
 import Signin from "./pages/home/auth/Signin";
 import Signup from "./pages/home/auth/Signup";
 import { ToastContainer } from "react-toastify";
+import SessionProvider from "./context/Session";
 
 const router = createBrowserRouter([
   {
@@ -68,8 +69,7 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    <>
-      <RouterProvider router={router} />
+    <SessionProvider>
       <ToastContainer
         position="top-right"
         autoClose={4000}
@@ -80,6 +80,7 @@ export default function App() {
         rtl={false}
         draggable
       />
-    </>
+      <RouterProvider router={router} />
+    </SessionProvider>
   );
 }
