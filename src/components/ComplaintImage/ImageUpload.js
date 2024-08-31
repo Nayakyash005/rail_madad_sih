@@ -10,6 +10,13 @@ export default function ImageUpload({ onChange, src }) {
     if (e.target.files.length === 0) return;
 
     const file = e.target.files[0];
+    console.log("file is ", file);
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      console.log("Invalid file type");
+      onChange(null);
+      return;
+    }
     const options = {
       quality: 0.95,
       size: 2,
@@ -27,7 +34,7 @@ export default function ImageUpload({ onChange, src }) {
 
   async function handleDrop(e) {
     e.preventDefault();
-    if(e.dataTransfer.files?.length <= 0) return;
+    if (e.dataTransfer.files?.length <= 0) return;
 
     const file = e.dataTransfer.files[0];
     // const fileType = file.type.split("/")[0];
@@ -61,6 +68,7 @@ export default function ImageUpload({ onChange, src }) {
           type="file"
           name="image"
           id="complaint-image"
+          accept="image/*"
         />
         {url && (
           <img
