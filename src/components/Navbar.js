@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { SessionContext } from "../context/Session";
 import LogoutBtn from "./LogoutBtn";
@@ -13,17 +13,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="shadow">
-      <div className="bg-white mx-auto h-full w-full flex items-center justify-between p-4 max-w-6xl">
+    <nav className="shadow bg-white">
+      <div className="mx-auto h-full w-full flex items-center justify-between p-4 max-w-6xl">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold">
+        <Link to="/" className="text-xl font-bold hover:underline">
           Logo.
         </Link>
 
         <div className="hidden sm:flex gap-4">
-          <Link to="/loading" className="hover:underline">
-            Loading
-          </Link>
           <Link to="/admin" className="hover:underline">
             Admin
           </Link>
