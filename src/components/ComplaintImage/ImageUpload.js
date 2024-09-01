@@ -19,7 +19,7 @@ export default function ImageUpload({ onChange, src }) {
     }
     const options = {
       quality: 0.95,
-      size: 2,
+      size: 0.1,
       maxWidth: 320, //   Image width will not exceed 320px.
       maxHeight: 320, // Image height will not exceed 320px.
     };

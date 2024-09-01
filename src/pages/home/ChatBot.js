@@ -1,99 +1,103 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "../../lib/utils";
 
-const chats = [
+const sample_chats = [
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
   {
-    isUser: true,
+    role: "user",
     message: "hello",
   },
   {
-    isUser: false,
+    role: "model",
     message: "Hi! How's it going?",
   },
 ];
 
-function ChatBot() {
+function ChatBot({chats = sample_chats}) {
+  const [messages, setMesseges] = useState(chats);
+  const [socket, setSocket] = useState(null);
+  const [msg, setMsg] = useState("");
+
   return (
     <>
-      <div className="min-h-screen space-y-2 px-2 pt-4">
-        <div className="">
-          {chats.map((chat) => (
+      <div className="min-h-screen space-y-2 px-2 py-4">
+        <div className="space-y-4">
+          {messages.map((chat) => (
             <div
               className={cn(
-                "px-4 py-3 w-fit text-black rounded-2xl",
-                chat.isUser
+                "px-4 py-3 w-fit max-w-[80%] text-black rounded-2xl",
+                chat.role === "user"
                   ? "bg-zinc-300 rounded-br-none ml-auto"
                   : "bg-blue-700 text-white rounded-bl-none"
               )}

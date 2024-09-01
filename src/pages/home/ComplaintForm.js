@@ -29,7 +29,7 @@ function ComplaintForm({ setShowChatbot }) {
 
       console.log("responce is ", res);
       toast.success("Complaint submitted succesfully");
-      setShowChatbot(true);
+      setShowChatbot(res.data.complaintId);
     } catch (error) {
       toast.error("Error accur");
       console.log("error is ", error);

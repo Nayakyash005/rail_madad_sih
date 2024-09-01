@@ -1,0 +1,12 @@
+.hideScrollar::-webkit-scrollbar {
+    width: 0px;
+}
+
+.hideScrollar::-webkit-scrollbar-track {
+    width: 0px;
+}
+
+.hideScrollar::-webkit-scrollbar-thumb {
+    background-color: #32323270;
+    border-radius: 3px;
+}

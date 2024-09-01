@@ -17,6 +17,7 @@ import Signin from "./pages/home/auth/Signin";
 import Signup from "./pages/home/auth/Signup";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
+import Complaint from "./pages/home/Complaint";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "complaint/:id",
+        element: <Complaint />,
+        loader: ({ params }) => params.id,
       },
       {
         path: "loading",
