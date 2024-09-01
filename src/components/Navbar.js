@@ -13,7 +13,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="shadow bg-white">
+    <nav className="shadow bg-white sticky top-0">
       <div className="mx-auto h-full w-full flex items-center justify-between p-4 max-w-6xl">
         {/* Logo */}
         <Link to="/" className="text-xl font-bold hover:underline">

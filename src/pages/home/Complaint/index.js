@@ -9,7 +9,7 @@ import styles from "./index.module.css";
 function Complaint() {
   const complaintId = useLoaderData();
   const [messages, setMessages] = useState([]);
-  // const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState(null);
   const [msg, setMsg] = useState("");
 
   function handleChange(e) {
@@ -21,12 +21,12 @@ function Complaint() {
     e.preventDefault();
     e.currentTarget.reset();
 
-    // if (!socket) {
-    //   console.log("socket is null");
-    //   return;
-    // }
+    if (!socket) {
+      console.log("socket is null");
+      return;
+    }
 
-    // socket.send(msg);
+    socket.send(msg);
 
     const newMsg = {
       role: "user",
@@ -34,6 +34,9 @@ function Complaint() {
     };
 
     setMessages((prev) => [...prev, newMsg]);
+    setTimeout(() => {
+      window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});
+    },100);
   }
 
   useEffect(() => {
@@ -47,49 +50,58 @@ function Complaint() {
       })
       .catch(console.log);
 
-    // const socket = new WebSocket("ws://localhost:8800");
+    const socket = new WebSocket("ws://localhost:8800");
 
-    // socket.onmessage = (response) => {
-    //   const newMsg = {
-    //     role: "model",
-    //     message: response.data,
-    //   };
-    //   setMessages((p) => [...p, newMsg]);
-    //   console.log(newMsg);
-    // };
+    socket.onmessage = (response) => {
+      const newMsg = {
+        role: "model",
+        message: response.data,
+      };
+      setMessages((p) => [...p, newMsg]);
 
-    // setSocket(socket);
+      setTimeout(() => {
+        window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});
+      },100);
+    };
 
-    // return () => socket?.close();
+    setSocket(socket);
+
+    return () => socket?.close();
   }, []);
 
   return (
-    <main
-      style={{ backgroundImage: `url(${BG_URL})` }}
-      className="w-full bg-zinc-700 bg-blend-soft-light h-[calc(100svh-60px)] flex flex-col overflow-y-scroll"
-    >
-      <div className="w-full flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
-        <div className="min-h-screen space-y-2 px-2 py-4">
-          <div className="space-y-4">
-            {messages.map((chat, i) => (
-              <div
-                key={i}
-                className={cn(
-                  styles.hideScrollar,
-                  "px-4 py-3 w-fit max-w-[80%] text-black rounded-2xl overflow-x-scroll",
-                  chat.role === "user"
-                    ? "bg-zinc-300 rounded-br-none ml-auto"
-                    : "bg-blue-700 text-white rounded-bl-none"
-                )}
-              >
-                <Markdown className="text-wrap">{chat.message}</Markdown>
-              </div>
-            ))}
+    <>
+      <img
+        className="fixed top-0 left-0 h-screen w-screen -z-10"
+        src={BG_URL}
+        alt=""
+      />
+      <main className="w-full mb-16 bg-blend-soft-light flex flex-col overflow-y-scroll">
+        <div className="w-full flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
+          <div className="space-y-2 px-2 py-4">
+            <div className="space-y-4">
+              {messages.map((chat, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    styles.hideScrollar,
+                    "px-4 py-3 w-fit max-w-[80%] text-black rounded-2xl overflow-x-scroll",
+                    chat.role === "user"
+                      ? "bg-white rounded-br-none ml-auto"
+                      : "bg-blue-700 text-white rounded-bl-none"
+                  )}
+                >
+                  <Markdown className="text-wrap">{chat.message}</Markdown>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+      </main>
+      <div className="fixed bottom-1 w-full">
         <form
           onSubmit={handleSubmit}
-          className="sticky bottom-1 flex w-full items-center rounded-[28px] bg-zinc-800 p-2 focus-within:shadow-md"
+          className="max-w-4xl mx-auto flex w-full items-center rounded-[28px] bg-zinc-800 p-2 focus-within:shadow-md"
         >
           <input
             className="w-full bg-transparent text-wrap text-white py-2 px-4 outline-none h-10 resize-none"
@@ -102,7 +114,7 @@ function Complaint() {
           </button>
         </form>
       </div>
-    </main>
+    </>
   );
 }
 
