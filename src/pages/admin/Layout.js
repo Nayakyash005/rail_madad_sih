@@ -30,9 +30,9 @@ export default function Layout() {
             <span className="text-[2.5vw] sm:text-base">Products</span>
           </SidebarLink>
 
-          <SidebarLink path={path} href="/admin/customers">
+          <SidebarLink path={path} href="/admin/users">
             <IoIosPeople />
-            <span className="text-[2.5vw] sm:text-base">Customers</span>
+            <span className="text-[2.5vw] sm:text-base">Users</span>
           </SidebarLink>
 
           <SidebarLink path={path} href="/admin/transactions">

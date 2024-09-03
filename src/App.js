@@ -18,6 +18,7 @@ import Signup from "./pages/home/auth/Signup";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
 import Complaint from "./pages/home/Complaint";
+import Users from "./pages/admin/Users";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <Dashboard />,
+      },
+      {
+        path: '/admin/users',
+        element: <Users />,
       },
     ],
   },
