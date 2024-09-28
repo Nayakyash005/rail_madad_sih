@@ -18,6 +18,7 @@ import Signup from "./pages/home/auth/Signup";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
 import Complaint from "./pages/home/Complaint";
+import InvoiceListPage from "./pages/admin/ComplainList";
 
 const router = createBrowserRouter([
   {
@@ -70,8 +71,8 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: '*',
-        element: <Dashboard />,
+        path: "/admin/Complaints",
+        element: <InvoiceListPage />,
       },
     ],
   },
