@@ -54,7 +54,7 @@ export default function Signup() {
           aria-label="Go to home"
           className="mx-auto mb-8 block max-w-max"
         >
-          <h1 className="text-3xl font-bold underline decoration-zinc-800">
+          <h1 className="text-3xl text-rail-dark font-bold underline decoration-rail-dark">
             Rail Madad
           </h1>
         </a>

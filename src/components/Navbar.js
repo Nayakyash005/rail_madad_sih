@@ -2,6 +2,40 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { SessionContext } from "../context/Session";
 import LogoutBtn from "./LogoutBtn";
+import {
+  Menu,
+  MenuTrigger,
+  MenuContent,
+  MenuItem,
+} from "@material-tailwind/react";
+import { Button } from "./ui/Button";
+import { FaUserCircle } from "react-icons/fa";
+
+function NavMenu({ children }) {
+  return (
+    <Menu>
+      <MenuTrigger>{children}</MenuTrigger>
+      <MenuContent>
+        <Link
+          to="/admin"
+          className="text-gray-700 hover:text-black"
+        >
+          <MenuItem>Admin</MenuItem>
+        </Link>
+        <Link
+          to="/complaints"
+          className="text-gray-700 hover:text-black"
+        >
+          <MenuItem>Track Complaint</MenuItem>
+        </Link>
+        <hr className="my-3" />
+        <div className="px-3 py-1.5">
+            <LogoutBtn>logout</LogoutBtn>
+        </div>
+      </MenuContent>
+    </Menu>
+  );
+}
 
 export default function Navbar() {
   // State to manage the visibility of the mobile menu
@@ -14,73 +48,44 @@ export default function Navbar() {
 
   return (
     <nav className="shadow bg-white sticky top-0">
-      <div className="mx-auto h-full w-full flex items-center justify-between p-4 max-w-6xl">
+      <div className="mx-auto h-full w-full flex items-center justify-between p-2 max-w-6xl">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold hover:underline">
-          Logo.
+        <Link
+          to="/"
+          className="text-xl h-14 relative font-bold hover:underline flex gap-4 items-center"
+        >
+          <img
+            className=" h-full aspect-square object-contain"
+            src="/LOGO.jpg"
+            alt=""
+          />
+          <span className="text-3xl hidden md:inline text-rail-dark">RailMadad</span>
         </Link>
 
-        <div className="hidden sm:flex gap-4">
-          <Link to="/admin" className="hover:underline">
-            Admin
-          </Link>
-          <Link to="/random-number" className="hover:underline">
-            Random
-          </Link>
-          {session.user ? (
-            <p className="space-x-1.5">
-            <Link to="/profile">{session.user.firstName}</Link>
-            <LogoutBtn>logout</LogoutBtn>
-            </p>
-          ) : (
-            <p className="space-x-1.5">
-              <Link to="/auth/signin" className="hover:underline">
-                Login
-              </Link>
-              <span>or</span>
-              <Link to="/auth/signup" className="hover:underline">
-                Signup
-              </Link>
-            </p>
-          )}
-        </div>
-
-        {/* Hamburger Menu Button */}
-        <button
-          className="flex flex-col justify-center items-center md:hidden"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          <span className="block w-6 h-0.5 bg-black mb-1"></span>
-          <span className="block w-6 h-0.5 bg-black mb-1"></span>
-          <span className="block w-6 h-0.5 bg-black"></span>
-        </button>
-      </div>
-
-      {/* Mobile Menu Links */}
-      {isMenuOpen && (
-        <div className="md:hidden">
-          <div className="bg-white shadow-md rounded-md p-4">
+        {session.user ? (
+          <NavMenu>
+            <div className="p-2 bg-rail-light text-white rounded-full">
+              <FaUserCircle size={28} />
+            </div>
+          </NavMenu>
+        ) : (
+          <p className="space-x-2">
             <Link
-              to="/home"
-              className="block px-4 py-2 hover:underline"
-              onClick={() => setIsMenuOpen(false)} // Close menu when a link is clicked
+              to="/auth/signin"
+              className="text-gray-700 hover:text-black"
             >
-              Home
+              <Button variant="outline">Login</Button>
             </Link>
-            <p className="px-4 py-2 space-x-1.5">
-              <Link to="/auth/signin" className="hover:underline">
-                Login
-              </Link>
-              <span>or</span>
-              <Link to="/auth/signup" className="hover:underline">
-                Signup
-              </Link>
-            </p>
-            {/* Additional mobile links can go here */}
-          </div>
-        </div>
-      )}
+            <span>or</span>
+            <Link
+              to="/auth/signup"
+              className="text-gray-700 hover:text-black"
+            >
+              <Button variant="outline">Signup</Button>
+            </Link>
+          </p>
+        )}
+      </div>
     </nav>
   );
 }

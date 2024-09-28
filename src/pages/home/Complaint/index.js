@@ -13,7 +13,10 @@ function Complaint() {
   const [msg, setMsg] = useState("");
 
   function handleChange(e) {
-    console.log(e.target.value);
+    e.target.rows = 2;
+    const newRows = Math.floor(e.target.scrollHeight / 24);
+    e.target.rows = Math.min(5, newRows);
+
     setMsg(e.target.value);
   }
 
@@ -76,7 +79,7 @@ function Complaint() {
         src={BG_URL}
         alt=""
       />
-      <main className="w-full mb-16 bg-blend-soft-light flex flex-col overflow-y-scroll">
+      <main className="w-full mb-16 bg-blend-soft-light flex flex-col">
         <div className="w-full flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
           <div className="space-y-2 px-2 py-4">
             <div className="space-y-4">
@@ -88,7 +91,7 @@ function Complaint() {
                     "px-4 py-3 w-fit max-w-[80%] text-black rounded-2xl overflow-x-scroll",
                     chat.role === "user"
                       ? "bg-white rounded-br-none ml-auto"
-                      : "bg-blue-700 text-white rounded-bl-none"
+                      : "bg-rail-light text-white rounded-bl-none"
                   )}
                 >
                   <Markdown className="text-wrap">{chat.message}</Markdown>
@@ -101,15 +104,15 @@ function Complaint() {
       <div className="fixed bottom-1 w-full">
         <form
           onSubmit={handleSubmit}
-          className="max-w-4xl mx-auto flex w-full items-center rounded-[28px] bg-zinc-800 p-2 focus-within:shadow-md"
+          className="max-w-3xl mx-auto flex w-full items-center rounded-3xl bg-gray-100 p-1 focus-within:shadow-md"
         >
-          <input
-            className="w-full bg-transparent text-wrap text-white py-2 px-4 outline-none h-10 resize-none"
+          <textarea
+            className="w-full bg-transparent text text-wrap py-2 px-4 outline-none resize-none"
             type="text"
             placeholder="Message Gemini"
             onChange={handleChange}
           />
-          <button className="size-10 text-nowrap rounded-full bg-zinc-100 px-2 mb-0.5 text-lg font-bold text-black hover:bg-zinc-300">
+          <button className="size-11 self-end text-nowrap rounded-full bg-black px-2 mb-0.5 text-lg font-bold text-white hover:bg-zinc-300">
             {"->"}
           </button>
         </form>

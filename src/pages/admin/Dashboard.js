@@ -1,23 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tile from "../../components/dashboard/Tile";
+import { getComplaintCount } from "../../action/complaint";
 
 export default function Dashboard() {
+  const [complaintData, setComplaintData] = useState({ count: 0, pending: 0 });
+
+  useEffect(() => {
+    getComplaintCount().then(setComplaintData);
+  }, []);
+
   return (
-    <section className="gap-4 flex flex-wrap justify-between w-full">
-      <Tile
-        title="Complaints"
-        value={6900}
-        percentage={40}
-        color="rgb(80 225 80)"
-      />
-      <Tile title="Users" value={700} percentage={-14} color="rgb(80 80 255)" />
-      <Tile
-        title="Transactions"
-        value={500}
-        percentage={80}
-        color="rgb(225 0 225)"
-      />
-      <Tile title="Products" value={50} percentage={30} color="rgb(225 80 0)" />
+    <section className="flex gap-4 flex-wrap justify-between w-full p-4">
+      <div className="grid grid-cols-4 w-full gap-4">
+        <Tile title={"Total Complaints"} value={complaintData.count} />
+        <Tile title={"Pending Complaints"} value={complaintData.pending} />
+        <Tile title="Users" value={700} />
+        <Tile title="Products" value={50} />
+      </div>
     </section>
   );
 }

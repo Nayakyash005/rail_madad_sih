@@ -18,7 +18,8 @@ import Signup from "./pages/home/auth/Signup";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
 import Complaint from "./pages/home/Complaint";
-import Users from "./pages/admin/Users";
+import Users from "./pages/admin/Users/Users";
+import AdminComplainPage from "./pages/admin/complaint/AdminComplainPage";
 
 const router = createBrowserRouter([
   {
@@ -71,12 +72,16 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: '*',
+        path: "*",
         element: <Dashboard />,
       },
       {
-        path: '/admin/users',
+        path: "/admin/users",
         element: <Users />,
+      },
+      {
+        path: "/admin/complaints",
+        element: <AdminComplainPage />,
       },
     ],
   },
@@ -84,18 +89,18 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    <SessionProvider>
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        theme="dark"
-        rtl={false}
-        draggable
-      />
-      <RouterProvider router={router} />
-    </SessionProvider>
+      <SessionProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          theme="dark"
+          rtl={false}
+          draggable
+        />
+        <RouterProvider router={router} />
+      </SessionProvider>
   );
 }
