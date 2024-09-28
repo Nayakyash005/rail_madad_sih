@@ -17,31 +17,31 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <div
-        key={path}
-        className="bg-white lg:order-1 w-full lg:w-full lg:px-4 py-1.5 col-span-1 shadow lg:h-full fixed lg:sticky lg:top-14 bottom-0 lg:z-0 h-14"
-      >
+      <div key={path} className="bg-white lg:order-1 w-full lg:w-full lg:px-4 py-1.5 col-span-1 shadow lg:h-full fixed lg:sticky lg:top-14 bottom-0 lg:z-0 h-14">
+        <h1 className="text-2xl font-semibold hover:underline p-4">LOGO.</h1>
+        <hr />
+        
         {/* DASHBOARD */}
-        <h5 className="hidden lg:block text-xl p-2">Dashboard</h5>
+        <h5 className="hidden lg:block text-lg p-2">Dashboard</h5>
         <ul className="flex lg:flex-col gap-1 w-full lg:w-auto justify-around">
           <SidebarLink path={path} href="/admin">
             <RiDashboardFill />
-            <span className="text-[2.5vw] sm:text-base">Dashboard</span>
+            <span>Dashboard</span>
           </SidebarLink>
 
           <SidebarLink path={path} href="/admin/complaints">
             <RiShoppingBag3Fill />
-            <span className="text-[2.5vw] sm:text-base">Complaints</span>
+            <span>Complaints</span>
           </SidebarLink>
 
-          <SidebarLink path={path} href="/admin/customers">
+          <SidebarLink path={path} href="/admin/users">
             <IoIosPeople />
-            <span className="text-[2.5vw] sm:text-base">Users</span>
+            <span>Users</span>
           </SidebarLink>
 
           <SidebarLink path={path} href="/admin/transactions">
             <AiFillFileText />
-            <span className="text-[2.5vw] sm:text-base">testimonials</span>
+            <span>Transactions</span>
           </SidebarLink>
         </ul>
       </div>

@@ -19,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
 import Complaint from "./pages/home/Complaint";
 import InvoiceListPage from "./pages/admin/ComplainList";
+import Users from "./pages/admin/Users";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/Complaints",
         element: <InvoiceListPage />,
+      },
+      {
+        path: '/admin/users',
+        element: <Users />,
       },
     ],
   },
