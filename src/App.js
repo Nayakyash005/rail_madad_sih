@@ -73,17 +73,17 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "/admin/Complaints",
+        path: "/admin/complaints",
         element: <InvoiceListPage />,
       },
       {
         path: "/admin/users",
         element: <Users />,
       },
-      {
-        path: "/admin/complaints",
-        element: <AdminComplainPage />,
-      },
+      // {
+      //   path: "/admin/complaints",
+      //   element: <AdminComplainPage />,
+      // },
     ],
   },
 ]);
