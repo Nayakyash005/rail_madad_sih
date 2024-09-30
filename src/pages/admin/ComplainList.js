@@ -23,80 +23,19 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { CSVLink } from "react-csv";
-import { v4 as uuidv4 } from "uuid";
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import FilterListIcon from "@mui/icons-material/FilterList";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import PrintIcon from "@mui/icons-material/Print";
-import AnalyticsIcon from "@mui/icons-material/Analytics";
-import NoteIcon from "@mui/icons-material/Note";
-import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
-import { Search, ExpandMore } from "@mui/icons-material";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-// import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-// import { v4 as uuidv4 } from 'uuid';
-// import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditIcon from "@mui/icons-material/Edit";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import DeleteIcon from "@mui/icons-material/Delete";
-
-const createRandomInvoiceData = (numInvoices) => {
-  const randomData = [];
-  const projectNames = [
-    "PNR-522247401", //pnr
-    "PNR-513745121",
-    "PNR-909877541",
-    "PNR-620190981",
-    "PNR-123458950",
-    "PNR-940813852",
-  ];
-  const clientNames = [
-    "522247401", //phone
-    "513745121",
-    "909877541",
-    "620190981",
-    "123458950",
-    "940813852",
-  ];
-  const statuses = ["Resolved", "In-Progress", "Pending", "Rejected"];
-
-  for (let i = 0; i < numInvoices; i++) {
-    const invoiceId = `#${Math.floor(1000000 + Math.random() * 9000000)}`;
-    const client = clientNames[Math.floor(Math.random() * clientNames.length)];
-    const project =
-      projectNames[Math.floor(Math.random() * projectNames.length)];
-    const dueDate = new Date(
-      Date.now() - Math.random() * 100000000000
-    ).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const amount = Math.floor(100000 + Math.random() * 4900000);
-    const paidAmount = Math.floor(Math.random() * amount);
-    const balanceAmount = amount - paidAmount;
-    const status = statuses[Math.floor(Math.random() * statuses.length)];
-    randomData.push({
-      invoiceId,
-      client,
-      project,
-      // amount,
-      dueDate,
-      paidAmount,
-      balanceAmount,
-      status,
-      action: "", // This will be handled by the component rendering
-    });
-  }
-
-  return randomData;
-}; // Ensure this import is correct
+import {
+  MdModeEdit,
+  MdOpenInNew,
+  MdDelete,
+  MdSearch,
+  MdStarBorder,
+  MdMoreVert,
+  MdFilterList,
+  MdContentCopy,
+} from "react-icons/md";
+import { createRandomInvoiceData } from "../../requests/complaint";
 
 const InvoiceListPage = () => {
   const [invoices, setInvoices] = useState([]);
@@ -400,7 +339,6 @@ const InvoiceListPage = () => {
   };
 
   return (
-    // <LocalizationProvider dateAdapter={AdapterDateFns}>
     <div className="p-4">
       <Dialog open={printSettingsOpen} onClose={handlePrintSettingsClose}>
         <DialogTitle>Print Settings</DialogTitle>
@@ -463,7 +401,7 @@ const InvoiceListPage = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Search />
+                      <MdSearch />
                     </InputAdornment>
                   ),
                 }}
@@ -583,7 +521,7 @@ const InvoiceListPage = () => {
             </div>
 
             <Button
-              startIcon={<FilterListIcon />}
+              startIcon={<MdFilterList />}
               variant="outlined"
               size="small"
               onClick={(e) => {
@@ -659,7 +597,7 @@ const InvoiceListPage = () => {
                 <TableRow key={invoice.invoiceId}>
                   <TableCell>
                     <IconButton size="small">
-                      <StarBorderIcon />
+                      <MdStarBorder />
                     </IconButton>
                     {invoice.invoiceId}
                   </TableCell>
@@ -697,27 +635,19 @@ const InvoiceListPage = () => {
                       size="small"
                       onClick={(event) => handleClick(event, invoice)}
                     >
-                      <MoreVertIcon />
+                      <MdMoreVert />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl3}
                       open={open}
                       onClose={handleClose}
-                      // anchorOrigin={{
-                      //   vertical: 'top',
-                      //   horizontal: 'right'
-                      // }}
-                      // transformOrigin={{
-                      //   vertical: 'top',
-                      //   horizontal: 'left'
-                      // }}
                     >
                       <MenuItem
                         onClick={() => {
                           handleEdit();
                         }}
                       >
-                        <EditIcon
+                        <MdModeEdit
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
@@ -728,7 +658,7 @@ const InvoiceListPage = () => {
                           handleEdit();
                         }}
                       >
-                        <OpenInNewIcon
+                        <MdOpenInNew
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
@@ -739,7 +669,7 @@ const InvoiceListPage = () => {
                           handleDelete();
                         }}
                       >
-                        <DeleteIcon
+                        <MdDelete
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
@@ -750,7 +680,7 @@ const InvoiceListPage = () => {
                           handleClone();
                         }}
                       >
-                        <ContentCopyIcon
+                        <MdContentCopy
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
@@ -765,7 +695,6 @@ const InvoiceListPage = () => {
         </>
       )}
     </div>
-    // </LocalizationProvider>
   );
 };
 

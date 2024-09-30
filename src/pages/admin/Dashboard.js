@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Tile from "../../components/dashboard/Tile";
-import { getComplaintCount } from "../../action/complaint";
+import { getComplaintCount } from "../../requests/complaint";
 
 export default function Dashboard() {
   const [complaintData, setComplaintData] = useState({ count: 0, pending: 0 });

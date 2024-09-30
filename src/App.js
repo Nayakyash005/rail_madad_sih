@@ -1,26 +1,24 @@
-import React from "react";
+import React, { Suspense } from "react";
+import { lazy } from "react";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import SessionProvider from "./context/Session";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
-import LoadingSpinner from "./components/LoadingSpinner";
-import HomeLayout from "./pages/home/Layout";
-import Home from "./pages/home";
+const LoadingSpinner = lazy(() => import("./components/LoadingSpinner"));
+const HomeLayout = lazy(() => import("./pages/home/Layout"));
+const AdminLayout = lazy(() => import("./pages/admin/Layout"));
+const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
 
-import AdminLayout from "./pages/admin/Layout";
-import Dashboard from "./pages/admin/Dashboard";
-import RandomNumber from "./pages/home/random";
-import { wait } from "./lib/utils";
-
-import GetStartedPage from "./components/GetStarted";
-import Signin from "./pages/home/auth/Signin";
-import Signup from "./pages/home/auth/Signup";
-import { ToastContainer } from "react-toastify";
-import SessionProvider from "./context/Session";
-import Complaint from "./pages/home/Complaint";
-import InvoiceListPage from "./pages/admin/ComplainList";
-import Users from "./pages/admin/Users/Users";
-import AdminComplainPage from "./pages/admin/complaint/AdminComplainPage";
+const Home = lazy(() => import("./pages/home"));
+const GetStartedPage = lazy(() => import("./components/GetStarted"));
+const Signin = lazy(() => import("./pages/home/auth/Signin"));
+const Signup = lazy(() => import("./pages/home/auth/Signup"));
+const Complaint = lazy(() => import("./pages/home/Complaint"));
+const Users = lazy(() => import("./pages/admin/Users/Users"));
+const AdminComplaint = lazy(() => import("./pages/admin/ComplainList"));
 
 const router = createBrowserRouter([
   {
@@ -45,14 +43,6 @@ const router = createBrowserRouter([
         path: "get-started",
         element: <GetStartedPage />,
       },
-      {
-        path: "random-number/",
-        element: <RandomNumber />,
-        loader: ({ params, request }) => {
-          console.log({ params, request });
-          return { response: wait(1000, Math.random() * 100) };
-        },
-      },
     ],
   },
   {
@@ -74,7 +64,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/complaints",
-        element: <InvoiceListPage />,
+        element: <AdminComplaint />,
       },
       {
         path: "/admin/users",
@@ -82,7 +72,7 @@ const router = createBrowserRouter([
       },
       // {
       //   path: "/admin/complaints",
-      //   element: <AdminComplainPage />,
+      //   element: <AdminComplaint />,
       // },
     ],
   },
@@ -90,18 +80,20 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-      <SessionProvider>
-        <ToastContainer
-          position="top-right"
-          autoClose={4000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          theme="dark"
-          rtl={false}
-          draggable
-        />
+    <SessionProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        theme="dark"
+        rtl={false}
+        draggable
+      />
+      <Suspense fallback={<LoadingSpinner/>}>
         <RouterProvider router={router} />
-      </SessionProvider>
+      </Suspense>
+    </SessionProvider>
   );
 }

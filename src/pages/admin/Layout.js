@@ -3,7 +3,6 @@ import { Link, Outlet, useNavigation } from "react-router-dom";
 import { RiShoppingBag3Fill, RiDashboardFill } from "react-icons/ri";
 import { IoIosPeople } from "react-icons/io";
 import { AiFillFileText } from "react-icons/ai";
-import InvoiceListPage from "./ComplainList";
 
 export default function Layout() {
   useNavigation();
