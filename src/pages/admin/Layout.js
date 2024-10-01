@@ -14,7 +14,7 @@ export default function Layout() {
     <div className="lg:grid bg-gray-200 grid-cols-5 xl:grid-cols-6 min-h-screen">
       <div
         key={path}
-        className="bg-white w-full lg:px-4 lg:py-4 shadow h-full"
+        className="bg-white w-full lg:px-4 lg:py-4 shadow h-full border-r"
       >
         <Link
           to="/"
