@@ -47,6 +47,16 @@ import NoteIcon from "@mui/icons-material/Note";
 import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
 import {
+  MdModeEdit,
+  MdOpenInNew,
+  MdDelete,
+  MdSearch,
+  MdStarBorder,
+  MdMoreVert,
+  MdFilterList,
+  MdContentCopy,
+} from "react-icons/md";
+import {
   Search,
   ExpandMore,
   RemoveShoppingCartRounded,
