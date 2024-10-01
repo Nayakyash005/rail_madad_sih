@@ -3,39 +3,48 @@ import { Link } from "react-router-dom";
 import { SessionContext } from "../context/Session";
 import LogoutBtn from "./LogoutBtn";
 import {
-  Menu,
-  MenuTrigger,
-  MenuContent,
-  MenuItem,
-} from "@material-tailwind/react";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/DropDownMenu";
 import { Button } from "./ui/Button";
 import { FaUserCircle } from "react-icons/fa";
+import { RiAdminFill } from "react-icons/ri";
+import { FaClipboardList } from "react-icons/fa6";
+import { MdLogout } from "react-icons/md";
 
-function NavMenu({ children }) {
-  return (
-    <Menu>
-      <MenuTrigger>{children}</MenuTrigger>
-      <MenuContent>
-        <Link
-          to="/admin"
-          className="text-gray-700 hover:text-black"
-        >
-          <MenuItem>Admin</MenuItem>
-        </Link>
-        <Link
-          to="/complaints"
-          className="text-gray-700 hover:text-black"
-        >
-          <MenuItem>Track Complaint</MenuItem>
-        </Link>
-        <hr className="my-3" />
-        <div className="px-3 py-1.5">
-            <LogoutBtn>logout</LogoutBtn>
-        </div>
-      </MenuContent>
-    </Menu>
-  );
-}
+const NavMenu = () => (
+  <DropdownMenu>
+    <DropdownMenuTrigger className="p-2 bg-primary text-white rounded-full">
+      <FaUserCircle size={24} />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <Link to="/admin">
+        <DropdownMenuItem className="space-x-2">
+          <RiAdminFill />
+          <span>Admin</span>
+        </DropdownMenuItem>
+      </Link>
+      <Link to="/complaints">
+        <DropdownMenuItem className="space-x-2">
+          <FaClipboardList />
+          <span>Track Complaint</span>
+        </DropdownMenuItem>
+      </Link>
+
+      <DropdownMenuSeparator />
+
+      <LogoutBtn className="w-full h-full">
+        <DropdownMenuItem className="flex items-center space-x-2">
+          <MdLogout />
+          <span>logout</span>
+        </DropdownMenuItem>
+      </LogoutBtn>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 export default function Navbar() {
   // State to manage the visibility of the mobile menu
@@ -59,28 +68,20 @@ export default function Navbar() {
             src="/LOGO.jpg"
             alt=""
           />
-          <span className="text-3xl hidden md:inline text-rail-dark">RailMadad</span>
+          <span className="text-3xl hidden md:inline text-primary">
+            RailMadad
+          </span>
         </Link>
 
         {session.user ? (
-          <NavMenu>
-            <div className="p-2 bg-rail-light text-white rounded-full">
-              <FaUserCircle size={28} />
-            </div>
-          </NavMenu>
+          <NavMenu />
         ) : (
           <p className="space-x-2">
-            <Link
-              to="/auth/signin"
-              className="text-gray-700 hover:text-black"
-            >
+            <Link to="/auth/signin" className="text-gray-700 hover:text-black">
               <Button variant="outline">Login</Button>
             </Link>
             <span>or</span>
-            <Link
-              to="/auth/signup"
-              className="text-gray-700 hover:text-black"
-            >
+            <Link to="/auth/signup" className="text-gray-700 hover:text-black">
               <Button variant="outline">Signup</Button>
             </Link>
           </p>

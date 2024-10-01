@@ -447,7 +447,6 @@ const InvoiceListPage = () => {
   };
 
   return (
-    // <LocalizationProvider dateAdapter={AdapterDateFns}>
     <div className="p-4">
       <Dialog open={printSettingsOpen} onClose={handlePrintSettingsClose}>
         <DialogTitle>Print Settings</DialogTitle>
@@ -510,7 +509,7 @@ const InvoiceListPage = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Search />
+                      <MdSearch />
                     </InputAdornment>
                   ),
                 }}
@@ -630,7 +629,7 @@ const InvoiceListPage = () => {
             </div>
 
             <Button
-              startIcon={<FilterListIcon />}
+              startIcon={<MdFilterList />}
               variant="outlined"
               size="small"
               onClick={(e) => {
@@ -706,7 +705,7 @@ const InvoiceListPage = () => {
                 <TableRow key={invoice._id}>
                   <TableCell>
                     <IconButton size="small">
-                      <StarBorderIcon />
+                      <MdStarBorder />
                     </IconButton>
                     {invoice._id}
                   </TableCell>
@@ -742,36 +741,52 @@ const InvoiceListPage = () => {
                       size="small"
                       onClick={(event) => handleClick(event, invoice)}
                     >
-                      <MoreVertIcon />
+                      <MdMoreVert />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl3}
                       open={open}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={handleEdit}>
-                        <EditIcon
+                      <MenuItem
+                        onClick={() => {
+                          handleEdit();
+                        }}
+                      >
+                        <MdModeEdit
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
                         Edit
                       </MenuItem>
-                      <MenuItem onClick={handleEdit}>
-                        <OpenInNewIcon
+                      <MenuItem
+                        onClick={() => {
+                          handleEdit();
+                        }}
+                      >
+                        <MdOpenInNew
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
                         Open
                       </MenuItem>
-                      <MenuItem onClick={handleDelete}>
-                        <DeleteIcon
+                      <MenuItem
+                        onClick={() => {
+                          handleDelete();
+                        }}
+                      >
+                        <MdDelete
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
                         Delete
                       </MenuItem>
-                      <MenuItem onClick={handleClone}>
-                        <ContentCopyIcon
+                      <MenuItem
+                        onClick={() => {
+                          handleClone();
+                        }}
+                      >
+                        <MdContentCopy
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
@@ -802,7 +817,6 @@ const InvoiceListPage = () => {
         </>
       )}
     </div>
-    // </LocalizationProvider>
   );
 };
 

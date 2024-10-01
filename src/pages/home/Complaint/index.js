@@ -112,7 +112,7 @@ function Complaint() {
             placeholder="Message Gemini"
             onChange={handleChange}
           />
-          <button className="size-11 self-end text-nowrap rounded-full bg-black px-2 mb-0.5 text-lg font-bold text-white hover:bg-zinc-300">
+          <button className="size-11 self-end text-nowrap rounded-full bg-black px-2 mb-0.5 text-lg font-bold text-white hover:bg-zinc-700">
             {"->"}
           </button>
         </form>

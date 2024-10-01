@@ -1,51 +1,77 @@
 import * as React from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
-
-const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
-  },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
-  },
-];
-
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 50 },
-  { id: 6, lastName: "Melisandre", firstName: "undefined", age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
-
-const paginationModel = { page: 0, pageSize: 5 };
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../../components/ui/Table";
+import { getAllUsers } from "../../../requests/users";
+import { Input } from "../../../components/ui/input";
 
 export default function Users() {
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
+
+  function filter(e) {
+    const key = e.target.value.trim().toLowerCase();
+
+    setFilteredData(
+      users.filter(
+        (user) =>
+          user.firstName.toLowerCase().includes(key) ||
+          user.lastName.toLowerCase().includes(key) ||
+          user.phone.toLowerCase().includes(key)
+      )
+    );
+  }
+
+  React.useEffect(() => {
+    getAllUsers().then((data) => {
+      setUsers(data);
+      setFilteredData(data);
+    });
+  }, []);
+
   return (
-    <main className="bg-white w-full h-full shadow p-4">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        sx={{ border: 0 }}
-      />
+    <main className="bg-background w-full h-full p-4">
+      <div className="py-4 flex items-center">
+        <Input
+          placeholder="Search user..."
+          onChange={filter}
+          className="max-w-sm bg-background"
+        />
+      </div>
+
+      <Table className="border bg-background">
+        <TableHeader>
+          <TableRow className="bg-primary hover:bg-primary">
+            <TableHead className="text-white">First Name</TableHead>
+            <TableHead className="text-white">Last Name</TableHead>
+            <TableHead className="text-white">Phone No.</TableHead>
+            <TableHead className="text-white">Complaints</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredData.length > 0 ? (
+            filteredData.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.firstName}</TableCell>
+                <TableCell>{user.lastName}</TableCell>
+                <TableCell>+91 {user.phone}</TableCell>
+                <TableCell>{user.complaints}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </main>
   );
 }
