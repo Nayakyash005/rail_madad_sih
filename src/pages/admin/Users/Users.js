@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,11 +10,45 @@ import {
 } from "../../../components/ui/Table";
 import { getAllUsers } from "../../../requests/users";
 import { Input } from "../../../components/ui/input";
-
+import {
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  IconButton,
+  Chip,
+  Avatar,
+  Stack,
+  Menu,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  InputAdornment,
+  DialogActions,
+  FormControlLabel,
+  Checkbox,
+  TablePagination,
+} from "@mui/material";
 export default function Users() {
   const [filteredData, setFilteredData] = React.useState([]);
   const [users, setUsers] = React.useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset page to 0 when changing rows per page
+  };
+
+  const paginatedInvoices = filteredData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
   function filter(e) {
     const key = e.target.value.trim().toLowerCase();
 
@@ -31,6 +66,7 @@ export default function Users() {
     getAllUsers().then((data) => {
       setUsers(data);
       setFilteredData(data);
+      console.log("datas is", data);
     });
   }, []);
 
@@ -54,8 +90,8 @@ export default function Users() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredData.length > 0 ? (
-            filteredData.map((user) => (
+          {paginatedInvoices.length > 0 ? (
+            paginatedInvoices.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>{user.firstName}</TableCell>
                 <TableCell>{user.lastName}</TableCell>
@@ -72,6 +108,21 @@ export default function Users() {
           )}
         </TableBody>
       </Table>
+
+      <TablePagination
+        component="div"
+        count={filteredData.length} // Total number of invoices
+        page={page}
+        style={{
+          width: "full",
+          backgroundColor: "rgb(158 36 82)",
+          color: " white",
+        }}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 8, 10, 25]} // Options for rows per page
+      />
     </main>
   );
 }
