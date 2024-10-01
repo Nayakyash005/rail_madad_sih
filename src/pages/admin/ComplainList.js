@@ -22,29 +22,43 @@ import {
   DialogActions,
   FormControlLabel,
   Checkbox,
+  TablePagination,
 } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+
+import {
+  StarBorder as StarBorderIcon,
+  MoreVert as MoreVertIcon,
+  Edit as EditIcon,
+  OpenInNew as OpenInNewIcon,
+  Delete as DeleteIcon,
+  ContentCopy as ContentCopyIcon,
+} from "@mui/icons-material";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { CSVLink } from "react-csv";
 import { v4 as uuidv4 } from "uuid";
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import FilterListIcon from "@mui/icons-material/FilterList";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import StarBorderIcon from "@mui/icons-material/StarBorder";
 import PrintIcon from "@mui/icons-material/Print";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import NoteIcon from "@mui/icons-material/Note";
 import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
-import { Search, ExpandMore } from "@mui/icons-material";
+import {
+  Search,
+  ExpandMore,
+  RemoveShoppingCartRounded,
+} from "@mui/icons-material";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 // import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 // import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 // import { v4 as uuidv4 } from 'uuid';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditIcon from "@mui/icons-material/Edit";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import EditIcon from "@mui/icons-material/Edit";
+// import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+// import DeleteIcon from "@mui/icons-material/Delete";
 
 const createRandomInvoiceData = (numInvoices) => {
   const randomData = [];
@@ -126,6 +140,20 @@ const InvoiceListPage = () => {
   const open = Boolean(anchorEl3);
   // fnuction to sort the data
   // const [open, setOpen] = useState(false);
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset page to 0 when changing rows per page
+  };
+  const server = process.env.REACT_APP_SERVER_URL;
   const handleClick = (e, invoice) => {
     setAnchorEl3(e.currentTarget);
     setselectedInvoice(invoice);
@@ -283,6 +311,21 @@ const InvoiceListPage = () => {
       return filters;
     });
   };
+
+  const fetchAllComplaints = async () => {
+    const response = await axios.get(
+      `${server}/api/complaints/getAllComplaints`
+    );
+    if (response) {
+      console.log("responce", response);
+      return response.data.data;
+    }
+    return [];
+  };
+  const paginatedInvoices = invoices.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
   useEffect(() => {
     const fetchInvoices = async () => {
       const token = localStorage.getItem("token");
@@ -309,17 +352,21 @@ const InvoiceListPage = () => {
 
     // fetchInvoices();
     // Temporary: Use random data if API call fails
-    const data = createRandomInvoiceData(9);
-    console.log("data is ", data);
-    const obj = {};
-    data.forEach((item) => {
-      obj[item.client] = item.client;
-    });
+    // const data = createRandomInvoiceData(9);
+    const fetchComplaint = async () => {
+      const data = await fetchAllComplaints();
+      console.log("data is ", data);
+      const obj = {};
+      data.forEach((item) => {
+        obj[item.client] = item.client;
+      });
 
-    const clientName = Object.keys(obj); // jjust cretaed an array of client name only
-    setAllNames(clientName);
-    setInvoices(data);
-    setFilteredInvoices(data);
+      const clientName = Object.keys(obj); // jjust cretaed an array of client name only
+      setAllNames(clientName);
+      setInvoices(data);
+      setFilteredInvoices(data);
+    };
+    fetchComplaint();
   }, []);
 
   const handleMenuClick = (event) => {
@@ -377,13 +424,13 @@ const InvoiceListPage = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Resolved":
+      case "resolved":
         return "success";
-      case "Pending":
+      case "pending":
         return "warning";
-      case "Rejected":
+      case "rejected":
         return "error";
-      case "In-Progress":
+      case "in-Progress":
         return "secondary";
       default:
         return "default";
@@ -655,13 +702,13 @@ const InvoiceListPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredInvoices.map((invoice) => (
-                <TableRow key={invoice.invoiceId}>
+              {paginatedInvoices.map((invoice) => (
+                <TableRow key={invoice._id}>
                   <TableCell>
                     <IconButton size="small">
                       <StarBorderIcon />
                     </IconButton>
-                    {invoice.invoiceId}
+                    {invoice._id}
                   </TableCell>
                   <TableCell>
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -670,16 +717,14 @@ const InvoiceListPage = () => {
                         alt={invoice.client}
                         style={{ marginRight: "0.5rem" }}
                       />
-                      {invoice.client}
+                      {invoice.phone}
                     </div>
                   </TableCell>
-                  <TableCell>{invoice.project}</TableCell>
-                  {/* <TableCell>${invoice.amount.toLocaleString()}</TableCell> */}
-
-                  <TableCell>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  <TableCell>{invoice.pnr}</TableCell>
+                  <TableCell style={{ maxWidth: "50px" }}>
+                    {invoice.description || "any Description"}
                   </TableCell>
-                  <TableCell>{invoice.dueDate}</TableCell>
+                  <TableCell>{invoice.dueDate || "03-04-2024"}</TableCell>
                   <TableCell>
                     {["high", "medium", "low"][Math.floor(Math.random() * 3)] ||
                       "high"}
@@ -703,53 +748,29 @@ const InvoiceListPage = () => {
                       anchorEl={anchorEl3}
                       open={open}
                       onClose={handleClose}
-                      // anchorOrigin={{
-                      //   vertical: 'top',
-                      //   horizontal: 'right'
-                      // }}
-                      // transformOrigin={{
-                      //   vertical: 'top',
-                      //   horizontal: 'left'
-                      // }}
                     >
-                      <MenuItem
-                        onClick={() => {
-                          handleEdit();
-                        }}
-                      >
+                      <MenuItem onClick={handleEdit}>
                         <EditIcon
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
                         Edit
                       </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleEdit();
-                        }}
-                      >
+                      <MenuItem onClick={handleEdit}>
                         <OpenInNewIcon
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
                         Open
                       </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleDelete();
-                        }}
-                      >
+                      <MenuItem onClick={handleDelete}>
                         <DeleteIcon
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
                         />
                         Delete
                       </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleClone();
-                        }}
-                      >
+                      <MenuItem onClick={handleClone}>
                         <ContentCopyIcon
                           fontSize="small"
                           style={{ marginRight: "0.5rem" }}
@@ -762,6 +783,22 @@ const InvoiceListPage = () => {
               ))}
             </TableBody>
           </Table>
+
+          {/* Add TablePagination component */}
+          <TablePagination
+            component="div"
+            count={invoices.length} // Total number of invoices
+            page={page}
+            style={{
+              width: "full",
+              backgroundColor: "rgb(158 36 82)",
+              color: " white",
+            }}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 8, 10, 25]} // Options for rows per page
+          />
         </>
       )}
     </div>

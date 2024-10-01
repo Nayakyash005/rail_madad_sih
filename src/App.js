@@ -90,18 +90,18 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-      <SessionProvider>
-        <ToastContainer
-          position="top-right"
-          autoClose={4000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          theme="dark"
-          rtl={false}
-          draggable
-        />
-        <RouterProvider router={router} />
-      </SessionProvider>
+    <SessionProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        theme="dark"
+        rtl={false}
+        draggable
+      />
+      <RouterProvider router={router} />
+    </SessionProvider>
   );
 }
