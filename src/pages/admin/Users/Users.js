@@ -1,9 +1,9 @@
-import * as React from "react";
-import { useState, useMemo, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -11,44 +11,26 @@ import {
 import { getAllUsers } from "../../../requests/users";
 import { Input } from "../../../components/ui/input";
 import {
-  Button,
-  TextField,
   Select,
-  MenuItem,
-  IconButton,
-  Chip,
-  Avatar,
-  Stack,
-  Menu,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  InputAdornment,
-  DialogActions,
-  FormControlLabel,
-  Checkbox,
-  TablePagination,
-} from "@mui/material";
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
+import { Button } from "../../../components/ui/Button";
+
 export default function Users() {
   const [filteredData, setFilteredData] = React.useState([]);
   const [users, setUsers] = React.useState([]);
+  const [pageSizeString, setPageSize] = useState("10");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  const pageSize = Number.parseInt(pageSizeString);
 
-  // Handle rows per page change
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset page to 0 when changing rows per page
-  };
+  if (isNaN(pageSize)) {
+    pageSize = 10;
+  }
 
-  const paginatedInvoices = filteredData.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
   function filter(e) {
     const key = e.target.value.trim().toLowerCase();
 
@@ -66,63 +48,104 @@ export default function Users() {
     getAllUsers().then((data) => {
       setUsers(data);
       setFilteredData(data);
-      console.log("datas is", data);
     });
   }, []);
 
   return (
-    <main className="bg-background w-full h-full p-4">
+    <main className="w-full h-full md:p-4">
       <div className="py-4 flex items-center">
         <Input
+          className="max-w-sm bg-background mx-2 md:mx-0 shadow"
           placeholder="Search user..."
           onChange={filter}
-          className="max-w-sm bg-background"
         />
       </div>
 
-      <Table className="border bg-background">
-        <TableHeader>
-          <TableRow className="bg-primary hover:bg-primary">
-            <TableHead className="text-white">First Name</TableHead>
-            <TableHead className="text-white">Last Name</TableHead>
-            <TableHead className="text-white">Phone No.</TableHead>
-            <TableHead className="text-white">Complaints</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedInvoices.length > 0 ? (
-            paginatedInvoices.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.firstName}</TableCell>
-                <TableCell>{user.lastName}</TableCell>
-                <TableCell>+91 {user.phone}</TableCell>
-                <TableCell>{user.complaints}</TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={4} className="h-24 text-center">
-                No results.
-              </TableCell>
+      <div className="border bg-background shadow">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-primary">
+              <TableHead className="text-white">First Name</TableHead>
+              <TableHead className="text-white">Last Name</TableHead>
+              <TableHead className="text-white">Phone No.</TableHead>
+              <TableHead className="text-white">Complaints</TableHead>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredData.length > 0 ? (
+              filteredData
+                .slice(page * pageSize, (page + 1) * pageSize)
+                .map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>{user.firstName}</TableCell>
+                    <TableCell>{user.lastName}</TableCell>
+                    <TableCell className="font-roboto-mono text-nowrap">
+                      +91 {user.phone}
+                    </TableCell>
+                    <TableCell>{user.complaints}</TableCell>
+                  </TableRow>
+                ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={4} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
 
-      <TablePagination
-        component="div"
-        count={filteredData.length} // Total number of invoices
-        page={page}
-        style={{
-          width: "full",
-          backgroundColor: "rgb(158 36 82)",
-          color: " white",
-        }}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[5, 8, 10, 25]} // Options for rows per page
-      />
+          <TableFooter>
+            <TableCell colSpan={4}>
+              <div className="w-full text-sm flex gap-4 items-center justify-end">
+                <div className="flex items-center gap-2">
+                  <span>Rows per page: </span>
+                  <label htmlFor="rows-per-page" className="text-black">
+                    <Select
+                      onValueChange={setPageSize}
+                      name="categoryId"
+                      value={pageSizeString.toString()}
+                    >
+                      <SelectTrigger className="h-7">
+                        <SelectValue placeholder="Rows per page" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="5">5</SelectItem>
+                        <SelectItem value="10">10</SelectItem>
+                        <SelectItem value="25">25</SelectItem>
+                        <SelectItem value="50">50</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span>
+                    {page * pageSize + 1}-
+                    {Math.min(filteredData.length, (page + 1) * pageSize + 1)}{" "}
+                    of {filteredData.length}
+                  </span>
+                  <Button
+                    size="sm"
+                    variant="custom"
+                    disabled={page <= 0}
+                    onClick={() => setPage((n) => n - 1)}
+                  >
+                    {"<-"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="custom"
+                    disabled={(page + 1) * pageSize >= filteredData.length}
+                    onClick={() => setPage((n) => n + 1)}
+                  >
+                    {"->"}
+                  </Button>
+                </div>
+              </div>
+            </TableCell>
+          </TableFooter>
+        </Table>
+      </div>
     </main>
   );
 }

@@ -4,9 +4,7 @@ import { Button } from "../../../components/ui/Button";
 import { toast } from "react-toastify";
 import OtpForm from "./OTPform";
 import { SessionContext } from "../../../context/Session";
-
-export const BG_URL =
-  "https://railmadad.indianrailways.gov.in/madad/final/images/body-bg.jpg";
+import {BG_URL} from "../Layout"
 
 export async function requestOTP(phone) {
   // try {

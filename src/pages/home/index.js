@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { BG_URL } from "./auth/Signin";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
 import ImageUpload from "../../components/ComplaintImage/ImageUpload";
@@ -42,7 +41,7 @@ function ComplaintForm({ setShowChatbot }) {
   };
 
   return (
-    <form className="p-4 mt-4 md:p-8 border rounded shadow bg-white text-black flex flex-col gap-4 w-full max-w-2xl mx-auto">
+    <form className="p-4 mt-4 md:p-8 border rounded-xl shadow bg-white text-black flex flex-col gap-4 w-full max-w-2xl mx-auto">
       <h1 className="text-xl text-rail-dark sm:text-2xl font-bold">Grievance Detail</h1>
 
       <label htmlFor="pnr-input">
@@ -83,8 +82,7 @@ export default function Home() {
 
   return (
     <main
-      style={{ backgroundImage: `url(${BG_URL})` }}
-      className="w-full bg-zinc-700 bg-blend-soft-light h-[calc(100svh-60px)] flex flex-col overflow-y-scroll"
+      className="w-full flex flex-col overflow-y-scroll"
     >
       <div className="w-full flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
         <ComplaintForm setShowChatbot={showChatbot} />

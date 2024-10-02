@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { BG_URL } from "../auth/Signin";
 // import ChatBot from "../ChatBot";
 import Markdown from "react-markdown";
 import { useLoaderData } from "react-router-dom";
@@ -74,11 +73,6 @@ function Complaint() {
 
   return (
     <>
-      <img
-        className="fixed top-0 left-0 h-screen w-screen -z-10"
-        src={BG_URL}
-        alt=""
-      />
       <main className="w-full mb-16 bg-blend-soft-light flex flex-col">
         <div className="w-full flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
           <div className="space-y-2 px-2 py-4">

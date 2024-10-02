@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BG_URL } from "./Signin";
+import { BG_URL } from "../Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import OtpForm from "./OTPform";
