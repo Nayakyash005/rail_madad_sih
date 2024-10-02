@@ -30,7 +30,7 @@ const NavMenu = ({user}) => (
           <span>Admin</span>
         </DropdownMenuItem>
       </Link>
-      <Link to="/complaints">
+      <Link to="/my-complaints">
         <DropdownMenuItem className="space-x-2">
           <FaClipboardList />
           <span>Track Complaint</span>
