@@ -44,7 +44,7 @@ const ComplaintCard = (complaint) => (
 );
 
 export default function MyComplaintsPage() {
-  const [complaints, setComplaints] = useState(dummyData);
+  const [complaints, setComplaints] = useState([]);
 
   useEffect(() => {
     getMyComplaints().then(setComplaints);
