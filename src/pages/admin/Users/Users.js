@@ -82,11 +82,11 @@ export default function Users() {
 
       <Table className="border bg-background">
         <TableHeader>
-          <TableRow className="bg-primary hover:bg-primary">
-            <TableHead className="text-white">First Name</TableHead>
-            <TableHead className="text-white">Last Name</TableHead>
-            <TableHead className="text-white">Phone No.</TableHead>
-            <TableHead className="text-white">Complaints</TableHead>
+          <TableRow className="bg-muted">
+            <TableHead className="font-bold">First Name</TableHead>
+            <TableHead className="font-bold">Last Name</TableHead>
+            <TableHead className="font-bold">Phone No.</TableHead>
+            <TableHead className="font-bold">Complaints</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -110,14 +110,11 @@ export default function Users() {
       </Table>
 
       <TablePagination
+        className="bg-primary w-full"
+        style={{ color: "white" }}
         component="div"
         count={filteredData.length} // Total number of invoices
         page={page}
-        style={{
-          width: "full",
-          backgroundColor: "rgb(158 36 82)",
-          color: " white",
-        }}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
