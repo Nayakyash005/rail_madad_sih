@@ -57,15 +57,15 @@ export default function MyComplaintsPage() {
   );
 }
 
-// const dummyData = [
-//   {
-//     _id: "66fbdb4e31046554b60aa0f7",
-//     createdAt: "2024-01-09T18:30:00.000Z",
-//     description: "test",
-//     image_url:
-//       "https://firebasestorage.googleapis.com/v0/b/lucid-splicer-426105-u4.appspot.com/o/complaints%2F1727781709217_railway-station-2.jpg?alt=media",
-//     pnr: "123",
-//     status: "pending",
-//     updatedAt: "2024-02-09T18:30:00.000Z",
-//   },
-// ];
+const dummyData = [
+  {
+    _id: "66fbdb4e31046554b60aa0f7",
+    createdAt: "2024-01-09T18:30:00.000Z",
+    description: "test",
+    image_url:
+      "https://firebasestorage.googleapis.com/v0/b/lucid-splicer-426105-u4.appspot.com/o/complaints%2F1727781709217_railway-station-2.jpg?alt=media",
+    pnr: "123",
+    status: "pending",
+    updatedAt: "2024-02-09T18:30:00.000Z",
+  },
+];

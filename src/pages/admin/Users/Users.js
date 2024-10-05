@@ -7,7 +7,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  // TablePagination,
 } from "../../../components/ui/Table";
+import { TablePagination } from "@mui/material";
 import { getAllUsers } from "../../../requests/users";
 import { Input } from "../../../components/ui/input";
 import {
@@ -22,14 +24,29 @@ import { Button } from "../../../components/ui/Button";
 export default function Users() {
   const [filteredData, setFilteredData] = React.useState([]);
   const [users, setUsers] = React.useState([]);
-  const [pageSizeString, setPageSize] = useState("10");
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const pageSize = Number.parseInt(pageSizeString);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-  if (isNaN(pageSize)) {
-    pageSize = 10;
-  }
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset page to 0 when changing rows per page
+  };
+
+  // const pageSize = Number.parseInt(pageSizeString);
+
+  // if (isNaN(pageSize)) {
+  //   pageSize = 10;
+  // }
+
+  const paginatedInvoices = filteredData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   function filter(e) {
     const key = e.target.value.trim().toLowerCase();
@@ -61,91 +78,46 @@ export default function Users() {
         />
       </div>
 
-      <div className="border bg-background shadow">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-primary">
-              <TableHead className="text-white">First Name</TableHead>
-              <TableHead className="text-white">Last Name</TableHead>
-              <TableHead className="text-white">Phone No.</TableHead>
-              <TableHead className="text-white">Complaints</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredData.length > 0 ? (
-              filteredData
-                .slice(page * pageSize, (page + 1) * pageSize)
-                .map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.firstName}</TableCell>
-                    <TableCell>{user.lastName}</TableCell>
-                    <TableCell className="font-roboto-mono text-nowrap">
-                      +91 {user.phone}
-                    </TableCell>
-                    <TableCell>{user.complaints}</TableCell>
-                  </TableRow>
-                ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center">
-                  No results.
-                </TableCell>
+      <Table className="border bg-background">
+        <TableHeader>
+          <TableRow className="bg-muted">
+            <TableHead className="font-bold">First Name</TableHead>
+            <TableHead className="font-bold">Last Name</TableHead>
+            <TableHead className="font-bold">Phone No.</TableHead>
+            <TableHead className="font-bold">Complaints</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {paginatedInvoices.length > 0 ? (
+            paginatedInvoices.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.firstName}</TableCell>
+                <TableCell>{user.lastName}</TableCell>
+                <TableCell>+91 {user.phone}</TableCell>
+                <TableCell>{user.complaints}</TableCell>
               </TableRow>
-            )}
-          </TableBody>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
 
-          <TableFooter>
-            <TableCell colSpan={4}>
-              <div className="w-full text-sm flex gap-4 items-center justify-end">
-                <div className="flex items-center gap-2">
-                  <span>Rows per page: </span>
-                  <label htmlFor="rows-per-page" className="text-black">
-                    <Select
-                      onValueChange={setPageSize}
-                      name="categoryId"
-                      value={pageSizeString.toString()}
-                    >
-                      <SelectTrigger className="h-7">
-                        <SelectValue placeholder="Rows per page" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="5">5</SelectItem>
-                        <SelectItem value="10">10</SelectItem>
-                        <SelectItem value="25">25</SelectItem>
-                        <SelectItem value="50">50</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </label>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span>
-                    {page * pageSize + 1}-
-                    {Math.min(filteredData.length, (page + 1) * pageSize + 1)}{" "}
-                    of {filteredData.length}
-                  </span>
-                  <Button
-                    size="sm"
-                    variant="custom"
-                    disabled={page <= 0}
-                    onClick={() => setPage((n) => n - 1)}
-                  >
-                    {"<-"}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="custom"
-                    disabled={(page + 1) * pageSize >= filteredData.length}
-                    onClick={() => setPage((n) => n + 1)}
-                  >
-                    {"->"}
-                  </Button>
-                </div>
-              </div>
-            </TableCell>
-          </TableFooter>
-        </Table>
-      </div>
+      <TablePagination
+        className="bg-primary w-full"
+        style={{ color: "white" }}
+        component="div"
+        count={filteredData.length} // Total number of invoices
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 8, 10, 25]} // Options for rows per page
+      />
     </main>
   );
 }
