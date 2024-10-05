@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { FaCircle } from "react-icons/fa6";
 import { getStatusColor } from "../../../lib/utils";
 import { getMyComplaints } from "../../../requests/complaint";
+import { Link } from "react-router-dom";
 
 const ComplaintCard = (complaint) => (
-  <div
+  <Link
     key={complaint._id}
+    to={`/my-complaints/${complaint._id}`}
     className="flex sm:grid grid-cols-4 gap-2 md:gap-4 px-2 py-4 md:items-center bg-popover shadow hover:shadow-md transition"
   >
     <div className="size-24 min-w-24 md:size-32 md:min-w-32 justify-self-center">
@@ -40,7 +42,7 @@ const ComplaintCard = (complaint) => (
       <FaCircle className="size-3" color={getStatusColor(complaint.status)} />
       <p>{complaint.status}</p>
     </div>
-  </div>
+  </Link>
 );
 
 export default function MyComplaintsPage() {
@@ -56,16 +58,3 @@ export default function MyComplaintsPage() {
     </div>
   );
 }
-
-const dummyData = [
-  {
-    _id: "66fbdb4e31046554b60aa0f7",
-    createdAt: "2024-01-09T18:30:00.000Z",
-    description: "test",
-    image_url:
-      "https://firebasestorage.googleapis.com/v0/b/lucid-splicer-426105-u4.appspot.com/o/complaints%2F1727781709217_railway-station-2.jpg?alt=media",
-    pnr: "123",
-    status: "pending",
-    updatedAt: "2024-02-09T18:30:00.000Z",
-  },
-];

@@ -4,6 +4,7 @@ import { Button } from "../../components/ui/Button";
 import ImageUpload from "../../components/ComplaintImage/ImageUpload";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Body from "../../components/Body";
 
 function ComplaintForm({ setShowChatbot }) {
   const [image, setimage] = useState(null);
@@ -84,9 +85,11 @@ export default function Home() {
     <main
       className="w-full flex flex-col overflow-y-scroll"
     >
-      <div className="w-full flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
+      <div className="w-full min-h-screen flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
         <ComplaintForm setShowChatbot={showChatbot} />
       </div>
+
+      <Body/>
     </main>
   );
 }
