@@ -7,7 +7,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  // TablePagination,
 } from "../../../components/ui/Table";
+import { TablePagination } from "@mui/material";
 import { getAllUsers } from "../../../requests/users";
 import { Input } from "../../../components/ui/input";
 import {
@@ -22,14 +24,29 @@ import { Button } from "../../../components/ui/Button";
 export default function Users() {
   const [filteredData, setFilteredData] = React.useState([]);
   const [users, setUsers] = React.useState([]);
-  const [pageSizeString, setPageSize] = useState("10");
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const pageSize = Number.parseInt(pageSizeString);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-  if (isNaN(pageSize)) {
-    pageSize = 10;
-  }
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset page to 0 when changing rows per page
+  };
+
+  // const pageSize = Number.parseInt(pageSizeString);
+
+  // if (isNaN(pageSize)) {
+  //   pageSize = 10;
+  // }
+
+  const paginatedInvoices = filteredData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   function filter(e) {
     const key = e.target.value.trim().toLowerCase();
