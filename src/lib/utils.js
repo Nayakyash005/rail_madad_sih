@@ -10,3 +10,18 @@ export function wait(ms, data) {
     setTimeout(() => res(data), ms);
   });
 }
+
+export const getStatusColor = (status) => {
+  switch (status) {
+    case "resolved":
+      return "#0f0";
+    case "pending":
+      return "#ee0";
+    case "rejected":
+      return "#f00";
+    case "in-Progress":
+      return "#00f";
+    default:
+      return "gray";
+  }
+};

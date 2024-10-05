@@ -6,6 +6,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/DropDownMenu";
@@ -15,19 +16,21 @@ import { RiAdminFill } from "react-icons/ri";
 import { FaClipboardList } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 
-const NavMenu = () => (
+const NavMenu = ({user}) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="p-2 bg-primary text-white rounded-full">
       <FaUserCircle size={24} />
     </DropdownMenuTrigger>
     <DropdownMenuContent>
+      <DropdownMenuLabel>{user.firstName} {user.lastName}</DropdownMenuLabel>
+      <DropdownMenuSeparator />
       <Link to="/admin">
         <DropdownMenuItem className="space-x-2">
           <RiAdminFill />
           <span>Admin</span>
         </DropdownMenuItem>
       </Link>
-      <Link to="/complaints">
+      <Link to="/my-complaints">
         <DropdownMenuItem className="space-x-2">
           <FaClipboardList />
           <span>Track Complaint</span>
@@ -74,7 +77,7 @@ export default function Navbar() {
         </Link>
 
         {session.user ? (
-          <NavMenu />
+          <NavMenu user={session.user} />
         ) : (
           <p className="space-x-2">
             <Link to="/auth/signin" className="text-gray-700 hover:text-black">

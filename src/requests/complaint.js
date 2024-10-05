@@ -16,7 +16,22 @@ export async function getAllComplaints() {
   );
 
   if (res.ok) {
-    const {data} = await res.json();
+    const data = await res.json();
+
+    if(data.success) return data.data;
+  }
+
+  return [];
+}
+
+export async function getMyComplaints() {
+  const res = await fetch(
+    process.env.REACT_APP_SERVER_URL + "/api/complaints/my",
+    { credentials: "include" }
+  );
+
+  if (res.ok) {
+    const { data } = await res.json();
 
     return data || [];
   }

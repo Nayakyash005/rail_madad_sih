@@ -2,17 +2,18 @@ import React, { Suspense } from "react";
 import { lazy } from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LoadingSpinner from"./components/LoadingSpinner";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import MyComplaintsPage from "./pages/home/MyComplaints/page";
 
-const LoadingSpinner = lazy(() => import("./components/LoadingSpinner"));
+const Home = lazy(() => import("./pages/home"));
 const HomeLayout = lazy(() => import("./pages/home/Layout"));
 const AdminLayout = lazy(() => import("./pages/admin/Layout"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
 
-const Home = lazy(() => import("./pages/home"));
 const GetStartedPage = lazy(() => import("./components/GetStarted"));
 const Signin = lazy(() => import("./pages/home/auth/Signin"));
 const Signup = lazy(() => import("./pages/home/auth/Signup"));
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "my-complaints",
+        element: <MyComplaintsPage />,
       },
       {
         path: "complaint/:id",
@@ -54,7 +59,7 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "admin",
+    path: "/admin",
     element: <AdminLayout />,
 
     children: [
