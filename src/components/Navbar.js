@@ -33,7 +33,7 @@ const NavMenu = ({user}) => (
       <Link to="/my-complaints">
         <DropdownMenuItem className="space-x-2">
           <FaClipboardList />
-          <span>Track Complaint</span>
+          <span>My Complaints</span>
         </DropdownMenuItem>
       </Link>
 
@@ -59,7 +59,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="shadow bg-white sticky top-0">
+    <nav className="shadow bg-white sticky top-0 z-50">
       <div className="mx-auto h-full w-full flex items-center justify-between p-2 max-w-6xl">
         {/* Logo */}
         <Link

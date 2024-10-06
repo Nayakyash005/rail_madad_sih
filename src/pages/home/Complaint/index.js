@@ -47,7 +47,7 @@ function Complaint() {
       .then((response) => {
         console.log(response);
         if (response.success) {
-          setMessages(response.data);
+          setMessages(response.data.conversations ?? []);
         }
       })
       .catch(console.log);

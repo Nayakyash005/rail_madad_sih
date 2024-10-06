@@ -8,7 +8,7 @@ export default function Layout() {
   return (
     <div>
       <img
-        className="fixed top-0 left-0 h-screen w-screen -z-10"
+        className="fixed object-cover top-0 left-0 h-screen w-screen -z-10"
         src={BG_URL}
         alt=""
       />

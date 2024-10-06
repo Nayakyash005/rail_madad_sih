@@ -13,6 +13,7 @@ const Home = lazy(() => import("./pages/home"));
 const HomeLayout = lazy(() => import("./pages/home/Layout"));
 const AdminLayout = lazy(() => import("./pages/admin/Layout"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
+const ComplaintDetails = lazy(() => import("./pages/admin/Complaint"));
 
 const GetStartedPage = lazy(() => import("./components/GetStarted"));
 const Signin = lazy(() => import("./pages/home/auth/Signin"));
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
       {
         path: "my-complaints",
         element: <MyComplaintsPage />,
+      },
+      {
+        path: "my-complaints/:id",
+        element: <ComplaintDetails />,
+        loader: ({ params }) => params.id,
       },
       {
         path: "complaint/:id",

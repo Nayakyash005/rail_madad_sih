@@ -39,6 +39,21 @@ export async function getMyComplaints() {
   return [];
 }
 
+export async function getComplaint(complaintId) {
+  const res = await fetch(
+    process.env.REACT_APP_SERVER_URL + "/api/complaints/"+complaintId,
+    { credentials: "include" }
+  );
+
+  if (res.ok) {
+    const { data } = await res.json();
+
+    return data || {};
+  }
+
+  return {};
+}
+
 export const createRandomInvoiceData = (numInvoices) => {
   const randomData = [];
   const projectNames = [
