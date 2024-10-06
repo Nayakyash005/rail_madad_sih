@@ -103,3 +103,5 @@ export const createRandomInvoiceData = (numInvoices) => {
 
   return randomData;
 };
+
+export const getComplaintById = async (id) => {};
