@@ -1,7 +1,9 @@
+import { wait } from "../lib/utils";
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:8800";
+
 export async function getComplaintCount() {
-  const res = await fetch(
-    process.env.REACT_APP_SERVER_URL + "/api/complaints/count"
-  );
+  const res = await fetch(SERVER_URL + "/api/complaints/count");
 
   if (res.ok) {
     return await res.json();
@@ -11,24 +13,21 @@ export async function getComplaintCount() {
 }
 
 export async function getAllComplaints() {
-  const res = await fetch(
-    process.env.REACT_APP_SERVER_URL + "/api/complaints/all"
-  );
+  const res = await fetch(SERVER_URL + "/api/complaints/all");
 
   if (res.ok) {
     const data = await res.json();
 
-    if(data.success) return data.data;
+    if (data.success) return data.data;
   }
 
   return [];
 }
 
 export async function getMyComplaints() {
-  const res = await fetch(
-    process.env.REACT_APP_SERVER_URL + "/api/complaints/my",
-    { credentials: "include" }
-  );
+  const res = await fetch(SERVER_URL + "/api/complaints/my", {
+    credentials: "include",
+  });
 
   if (res.ok) {
     const { data } = await res.json();
@@ -40,10 +39,9 @@ export async function getMyComplaints() {
 }
 
 export async function getComplaint(complaintId) {
-  const res = await fetch(
-    process.env.REACT_APP_SERVER_URL + "/api/complaints/"+complaintId,
-    { credentials: "include" }
-  );
+  const res = await fetch(SERVER_URL + "/api/complaints/" + complaintId, {
+    credentials: "include",
+  });
 
   if (res.ok) {
     const { data } = await res.json();

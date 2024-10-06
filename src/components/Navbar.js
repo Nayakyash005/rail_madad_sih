@@ -15,11 +15,12 @@ import { FaUserCircle } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
 import { FaClipboardList } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
+import { Avatar } from "@mui/material";
 
 const NavMenu = ({user}) => (
   <DropdownMenu>
-    <DropdownMenuTrigger className="p-2 bg-primary text-white rounded-full">
-      <FaUserCircle size={24} />
+    <DropdownMenuTrigger className="bg-primary text-white rounded-full">
+      <Avatar sx={{bgcolor: "#9e2452", padding: 3}}>{(user.firstName[0] + user?.lastName[0]).toUpperCase()}</Avatar>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
       <DropdownMenuLabel>{user.firstName} {user.lastName}</DropdownMenuLabel>
