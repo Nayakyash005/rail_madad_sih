@@ -18,7 +18,7 @@ export async function getAllComplaints() {
   if (res.ok) {
     const data = await res.json();
 
-    if(data.success) return data.data;
+    if (data.success) return data.data;
   }
 
   return [];
@@ -90,3 +90,5 @@ export const createRandomInvoiceData = (numInvoices) => {
 
   return randomData;
 };
+
+export const getComplaintById = async (id) => {};

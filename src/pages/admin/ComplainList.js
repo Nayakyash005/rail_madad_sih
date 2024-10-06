@@ -180,6 +180,12 @@ const InvoiceListPage = () => {
   const handleEdit = () => {
     navigate("/apps/invoice/create?id=12");
   };
+
+  const handleOpen = (id) => {
+    console.log("id is", selectedInvoices._id);
+    navigate(`/admin/complaint-section/${selectedInvoices._id}`);
+  };
+
   const handleClose = () => {
     setAnchorEl3(false);
   };
@@ -749,7 +755,7 @@ const InvoiceListPage = () => {
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          handleEdit();
+                          handleOpen(invoice._id);
                         }}
                       >
                         <MdOpenInNew

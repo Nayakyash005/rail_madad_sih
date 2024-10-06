@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { lazy } from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoadingSpinner from"./components/LoadingSpinner";
+import LoadingSpinner from "./components/LoadingSpinner";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
 import "react-toastify/dist/ReactToastify.css";
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
         element: <AdminComplaint />,
       },
       {
-        path: "/admin/complaint-section",
+        path: "/admin/complaint-section/:id",
         element: <ComplaintSection />,
       },
       {
