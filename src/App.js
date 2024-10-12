@@ -18,7 +18,7 @@ const GetStartedPage = lazy(() => import("./components/GetStarted"));
 const Signup = lazy(() => import("./pages/home/auth/Signup"));
 const Signin = lazy(() => import("./pages/home/auth/Signin"));
 const MyComplaintsPage = lazy(() => import("./pages/home/MyComplaints/page"));
-const ComplaintDetails = lazy(() => import("./pages/home/Complaint"));
+const ComplaintDetails = lazy(() => import("./pages/home/MyComplaints/[id]/Complaint"));
 const Complaint = lazy(() => import("./pages/home/Complaint"));
 
 const EveryComplaint = lazy(() => import("./pages/admin/EveryComplaint"));
