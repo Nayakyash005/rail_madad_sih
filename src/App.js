@@ -22,6 +22,7 @@ const Complaint = lazy(() => import("./pages/home/Complaint"));
 const Users = lazy(() => import("./pages/admin/Users/Users"));
 const AdminComplaint = lazy(() => import("./pages/admin/ComplainList"));
 const ComplaintSection = lazy(() => import("./pages/admin/Complaint"));
+const EveryComplaint = lazy(() => import("./pages/admin/EveryComplaint"));
 const router = createBrowserRouter([
   {
     path: "/",
@@ -79,7 +80,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/complaint-section/:id",
-        element: <ComplaintSection />,
+        element: <EveryComplaint />,
       },
       {
         path: "/admin/users",

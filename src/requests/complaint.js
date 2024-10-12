@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export async function getComplaintCount() {
   const res = await fetch(
     process.env.REACT_APP_SERVER_URL + "/api/complaints/count"
@@ -41,7 +43,7 @@ export async function getMyComplaints() {
 
 export async function getComplaint(complaintId) {
   const res = await fetch(
-    process.env.REACT_APP_SERVER_URL + "/api/complaints/"+complaintId,
+    process.env.REACT_APP_SERVER_URL + "/api/complaints/" + complaintId,
     { credentials: "include" }
   );
 
@@ -106,4 +108,20 @@ export const createRandomInvoiceData = (numInvoices) => {
   return randomData;
 };
 
-export const getComplaintById = async (id) => {};
+export const getComplaintById = async (id) => {
+  const responce = axios.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/complaints/${id}`
+  );
+
+  console.log("the responce is ", responce);
+  return responce;
+};
+
+export const getpassengerDetailsById = async (id) =>  {
+  const responce = axios.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/passanger/${id}`
+  );
+
+  console.log("the responce is ", responce);
+  return responce;
+};
