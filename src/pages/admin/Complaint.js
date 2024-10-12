@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Box, Typography, Chip, Stack, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import {
   AccessTime as AccessTimeIcon,
-  Train as TrainIcon,
-  Phone as PhoneIcon,
   LocationOn as LocationIcon,
   Category as CategoryIcon,
   PriorityHigh as PriorityHighIcon,

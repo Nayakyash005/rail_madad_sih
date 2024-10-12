@@ -1,27 +1,26 @@
-import React, { Suspense } from "react";
-import { lazy } from "react";
-
+import React, { Suspense, lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "./context/Session";
 import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
-import MyComplaintsPage from "./pages/home/MyComplaints/page";
+import { getComplaint } from "./requests/complaint";
+
+const AdminLayout = lazy(() => import("./pages/admin/Layout"));
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminComplaint = lazy(() => import("./pages/admin/ComplainList"));
+const ComplaintSection = lazy(() => import("./pages/admin/Complaint"));
+const AdminUsers = lazy(() => import("./pages/admin/Users/Users"));
 
 const Home = lazy(() => import("./pages/home"));
 const HomeLayout = lazy(() => import("./pages/home/Layout"));
-const AdminLayout = lazy(() => import("./pages/admin/Layout"));
-const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
-const ComplaintDetails = lazy(() => import("./pages/admin/Complaint"));
-
 const GetStartedPage = lazy(() => import("./components/GetStarted"));
-const Signin = lazy(() => import("./pages/home/auth/Signin"));
 const Signup = lazy(() => import("./pages/home/auth/Signup"));
+const Signin = lazy(() => import("./pages/home/auth/Signin"));
+const MyComplaintsPage = lazy(() => import("./pages/home/MyComplaints/page"));
+const ComplaintDetails = lazy(() => import("./pages/home/Complaint"));
 const Complaint = lazy(() => import("./pages/home/Complaint"));
-const Users = lazy(() => import("./pages/admin/Users/Users"));
-const AdminComplaint = lazy(() => import("./pages/admin/ComplainList"));
-const ComplaintSection = lazy(() => import("./pages/admin/Complaint"));
+
 const EveryComplaint = lazy(() => import("./pages/admin/EveryComplaint"));
 const router = createBrowserRouter([
   {
@@ -40,7 +39,7 @@ const router = createBrowserRouter([
       {
         path: "my-complaints/:id",
         element: <ComplaintDetails />,
-        loader: ({ params }) => params.id,
+        loader: ({ params }) => ({ complaintPromise: getComplaint(params.id) }),
       },
       {
         path: "complaint/:id",
@@ -72,7 +71,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Dashboard />,
+        element: <AdminDashboard />,
       },
       {
         path: "/admin/complaints",
@@ -84,7 +83,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/users",
-        element: <Users />,
+        element: <AdminUsers />,
       },
       // {
       //   path: "/admin/complaints",
