@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { Snackbar, Alert } from "@mui/material";
 export async function getAllUsers() {
   const res = await fetch(process.env.REACT_APP_SERVER_URL + "/api/user/all", {
     credentials: "include",
@@ -16,12 +16,21 @@ export async function getAllUsers() {
   return [];
 }
 
-export const getUserById = async (phone) => {
+export const getUserById = async (phone, setError) => {
   if (phone) {
-    const res = await axios.get(
-      process.env.REACT_APP_SERVER_URL + "/api/user/" + phone
-    );
-    console.log("user for this page is ", res.data);
-    return res.data;
+    try {
+      const res = await axios.get(
+        process.env.REACT_APP_SERVER_URL + "/api/user/" + phone
+      );
+      console.log("user for this page is ", res.data);
+      return res.data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("User not found!");
+      } else {
+        setError("An unexpected error occurred!");
+      }
+      return null;
+    }
   }
 };

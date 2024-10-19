@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 // import express from "express";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router";
+
+import { Snackbar, Alert } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+
 import {
   Avatar,
   Box,
@@ -47,6 +52,7 @@ import { Link } from "react-router-dom";
 import { getComplaintById } from "../../requests/complaint";
 import { AiFillDatabase } from "react-icons/ai";
 import { getUserById } from "../../requests/users";
+import axios from "axios";
 // import { data } from "@remix-run/router/dist/utils";
 const StyledPriorityBanner = styled(Box)(({ theme, priority }) => ({
   width: "100%",
@@ -114,7 +120,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
             //   onClick={() => setIsStatusChangeOpen(!isStatusChangeOpen)}
             onClick={() => setComplaint({ ...complaint, status: "pending" })}
           >
-            Pending
+            pending
           </button>
         </DropdownMenuItem>
       </div>
@@ -129,7 +135,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
               setComplaint({ ...complaint, status: "In-progress" })
             }
           >
-            In-Progress
+            in-progress
           </button>
         </DropdownMenuItem>
       </div>
@@ -145,7 +151,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
             //   onClick={() => setIsStatusChangeOpen(!isStatusChangeOpen)}
             onClick={() => setComplaint({ ...complaint, status: "solved" })}
           >
-            Solved
+            solved
           </button>
         </DropdownMenuItem>
       </div>
@@ -157,6 +163,8 @@ const ComplaintDetails = () => {
   const [showTimeline, setShowTimeline] = useState(true);
   const [isStatusChangeOpen, setIsStatusChangeOpen] = useState(false);
   const { id } = useParams();
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState();
   const [complaintId, setComplaintId] = useState(id);
   const [custData, setCustData] = useState();
   const [data, setData] = useState(); // should be an object
@@ -184,6 +192,28 @@ const ComplaintDetails = () => {
       { status: "Resolution", date: "Pending", active: false },
     ],
   });
+  const navigate = useNavigate();
+  const handleSave = async () => {
+    const status = complaint?.status || "pending";
+    const responce = await axios.post(
+      process.env.REACT_APP_SERVER_URL + "/api/complaints/changeStatus",
+      {
+        id: complaintId,
+        status: status,
+      },
+      {
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+    console.log("ressponce is ", responce);
+    navigate("/");
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const fillData = async (id) => {
     const responce = await getComplaintById(complaintId);
     // console.log("1 is ", responce);
@@ -194,9 +224,17 @@ const ComplaintDetails = () => {
     setData(responce?.data?.data);
     let dummy;
     // console.log("phone is ", id);
-    const responce2 = await getUserById(responce?.data?.data?.phone);
-    console.log("1 is c", responce2);
-    // console.log("2 is c", responce2.status);
+    const responce2 = await getUserById(responce?.data?.data?.phone, setError);
+
+    if (error) {
+      setOpen(true); // Show the Snackbar when there's an error
+    }
+    console.log("1 is c", responce2, error);
+    // console.log("2 is c", responce 2.status);
+    if (!responce2) {
+      console.log("user not found");
+      setOpen(true);
+    }
     console.log("3 is c", responce2?.data);
     // setComplaintId(id);
 
@@ -263,6 +301,12 @@ const ComplaintDetails = () => {
   return (
     <Box sx={{ padding: 3, maxWidth: 800, margin: "auto" }}>
       <Card elevation={3} sx={{ overflow: "hidden" }}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {error}
+          </Alert>
+        </Snackbar>
+
         <StyledPriorityBanner priority={complaint.priority} />
 
         <CardContent>
@@ -433,6 +477,14 @@ const ComplaintDetails = () => {
               />
             </div>
           </Box>
+          <div className="flex justify-end pt-4">
+            <button
+              className="border bg-green-600 text-white rounded-lg p-2 right-0 flex hover:bg-green-700 hover:scale-95 gap-3"
+              onClick={handleSave}
+            >
+              Save <SaveIcon />
+            </button>
+          </div>
         </CardContent>
       </Card>
     </Box>

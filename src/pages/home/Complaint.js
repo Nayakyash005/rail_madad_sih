@@ -9,7 +9,6 @@ import { Await, useLoaderData } from "react-router-dom";
 import { BsCalendar2DateFill as CalendarIcon } from "react-icons/bs";
 import { FaCircle } from "react-icons/fa6";
 import { getStatusColor } from "../../lib/utils";
-
 const Tile = ({ Icon, label, value }) => (
   <div className="bg-muted p-4 rounded-sm space-y-1">
     <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
