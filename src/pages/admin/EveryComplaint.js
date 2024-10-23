@@ -149,9 +149,9 @@ const StatusChanged = ({ setComplaint, complaint }) => (
             variant="outlined"
             fullWidth
             //   onClick={() => setIsStatusChangeOpen(!isStatusChangeOpen)}
-            onClick={() => setComplaint({ ...complaint, status: "solved" })}
+            onClick={() => setComplaint({ ...complaint, status: "resolved" })}
           >
-            solved
+            resolved
           </button>
         </DropdownMenuItem>
       </div>
@@ -208,7 +208,7 @@ const ComplaintDetails = () => {
       }
     );
     console.log("ressponce is ", responce);
-    navigate("/");
+    navigate("/admin/complaints");
   };
 
   const handleClose = () => {
