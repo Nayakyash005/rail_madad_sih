@@ -92,7 +92,6 @@ const router = createBrowserRouter([
         element: <AdminUsers />,
       },
       // {
-      //   path: "/admin/complaints",
       //   element: <AdminComplaint />,
       // },
     ],
