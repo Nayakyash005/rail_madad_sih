@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { Button } from "../../../components/ui/Button";
 
 /**
- * `phone` to get otp.
  * verify otp in `onSubmit` function and retuen error message to display if any.
  * @param {{onSubmit(otp:string) => Promise<string | null>, phone:string, onChangePhoneClick() => void}} param0 
  * @returns 
