@@ -102,7 +102,6 @@ const StatusChanged = ({ setComplaint, complaint }) => (
       <button
         variant="outlined"
         fullWidth
-        //   onClick={() => setComplaint({...complaintSample,"status":"In-progress"})}
       >
         Change Status
       </button>
