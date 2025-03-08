@@ -18,9 +18,11 @@ const GetStartedPage = lazy(() => import("./components/GetStarted"));
 const Signup = lazy(() => import("./pages/home/auth/Signup"));
 const Signin = lazy(() => import("./pages/home/auth/Signin"));
 const MyComplaintsPage = lazy(() => import("./pages/home/MyComplaints/page"));
-const ComplaintDetails = lazy(() => import("./pages/home/MyComplaints/[id]/Complaint"));
+const ComplaintDetails = lazy(() =>
+  import("./pages/home/MyComplaints/[id]/Complaint")
+);
 const Complaint = lazy(() => import("./pages/home/Complaint"));
-
+const ProtectedComponent = lazy(() => import("./ProtectedComponent"));
 const EveryComplaint = lazy(() => import("./pages/admin/EveryComplaint"));
 const router = createBrowserRouter([
   {
@@ -66,7 +68,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <ProtectedComponent>
+        <AdminLayout />
+      </ProtectedComponent>
+    ),
 
     children: [
       {
@@ -74,11 +80,11 @@ const router = createBrowserRouter([
         element: <AdminDashboard />,
       },
       {
-        path: "/admin/complaints",
+        path: "complaints",
         element: <AdminComplaint />,
       },
       {
-        path: "/admin/complaint-section/:id",
+        path: "complaint-section/:id",
         element: <EveryComplaint />,
       },
       {

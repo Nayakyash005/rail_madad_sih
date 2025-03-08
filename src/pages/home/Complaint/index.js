@@ -37,8 +37,8 @@ function Complaint() {
 
     setMessages((prev) => [...prev, newMsg]);
     setTimeout(() => {
-      window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});
-    },100);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }, 100);
   }
 
   useEffect(() => {
@@ -62,8 +62,11 @@ function Complaint() {
       setMessages((p) => [...p, newMsg]);
 
       setTimeout(() => {
-        window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});
-      },100);
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 100);
     };
 
     setSocket(socket);
@@ -77,6 +80,8 @@ function Complaint() {
         <div className="w-full flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
           <div className="space-y-2 px-2 py-4">
             <div className="space-y-4">
+              {" "}
+              
               {messages.map((chat, i) => (
                 <div
                   key={i}

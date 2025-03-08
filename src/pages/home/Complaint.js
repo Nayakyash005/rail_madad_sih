@@ -30,7 +30,7 @@ const ComplaintDetails = () => {
             <>
               <img
                 className="w-full max-w-md max-h-96 object-contain"
-                src={complaint.image_url}
+                src={complaint?.image_url}
                 alt="Image... "
               />
 
@@ -39,7 +39,7 @@ const ComplaintDetails = () => {
                 <h3 className="text-muted-foreground">
                   <b>Complaint Description</b>
                 </h3>
-                <p className="text-sm mt-0.5">{complaint.description}</p>
+                <p className="text-sm mt-0.5">{complaint?.description}</p>
               </div>
 
               {/* Info Cards */}
@@ -48,7 +48,7 @@ const ComplaintDetails = () => {
                   Icon={CalendarIcon}
                   label="Filed"
                   value={new Date(
-                    complaint.createdAt || "2 oct 1869"
+                    complaint?.createdAt || "2 oct 1869"
                   ).toLocaleDateString("en-UK", {
                     month: "short",
                     day: "2-digit",
@@ -58,17 +58,17 @@ const ComplaintDetails = () => {
                 <Tile
                   Icon={CategoryIcon}
                   label="Category"
-                  value={complaint.category}
+                  value={complaint?.category}
                 />
                 <Tile
                   Icon={CategoryIcon2}
                   label="Sub Category"
-                  value={complaint.subcategory}
+                  value={complaint?.subcategory}
                 />
                 <Tile
                   Icon={PriorityHighIcon}
                   label="Priority"
-                  value={complaint.severity?.toUpperCase()}
+                  value={complaint?.severity?.toUpperCase()}
                 />
               </div>
 
@@ -78,16 +78,16 @@ const ComplaintDetails = () => {
                   className="mx-5 my-2 relative w-0.5 overflow-visible"
                   style={{
                     background: `linear-gradient(${getStatusColor(
-                      complaint.status
+                      complaint?.status
                     )} ${getProgress(
-                      complaint.status
+                      complaint?.status
                     )}%, hsl(210, 40%, 90.1%) 0%)`,
                   }}
                 >
                   <FaCircle
                     style={{
-                      top: 1.12 * getProgress(complaint.status) - 2,
-                      color: getStatusColor(complaint.status),
+                      top: 1.12 * getProgress(complaint?.status) - 2,
+                      color: getStatusColor(complaint?.status),
                     }}
                     className="absolute left-[-2.5px] size-2"
                   />

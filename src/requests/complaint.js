@@ -40,6 +40,7 @@ export async function getMyComplaints() {
 }
 
 export async function getComplaint(complaintId) {
+  console.log("complain id is ", complaintId);
   const res = await fetch(
     process.env.REACT_APP_SERVER_URL + "/api/complaints/" + complaintId,
     { credentials: "include" }

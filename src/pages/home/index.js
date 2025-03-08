@@ -18,6 +18,7 @@ function ComplaintForm({ setShowChatbot }) {
         pnr,
         image,
       };
+      console.log("body is ", body);
       const res = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/complaints/done`,
         body,
@@ -43,7 +44,9 @@ function ComplaintForm({ setShowChatbot }) {
 
   return (
     <form className="p-4 mt-4 md:p-8 border rounded-xl shadow bg-white text-black flex flex-col gap-4 w-full max-w-2xl mx-auto">
-      <h1 className="text-xl text-rail-dark sm:text-2xl font-bold">Grievance Detail</h1>
+      <h1 className="text-xl text-rail-dark sm:text-2xl font-bold">
+        Grievance Detail
+      </h1>
 
       <label htmlFor="pnr-input">
         <h3 className="text-sm text-gray-600 mb-1">PNR number</h3>
@@ -82,14 +85,12 @@ export default function Home() {
   }
 
   return (
-    <main
-      className="w-full flex flex-col overflow-y-scroll"
-    >
+    <main className="w-full flex flex-col overflow-y-scroll">
       <div className="w-full min-h-screen flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
         <ComplaintForm setShowChatbot={showChatbot} />
       </div>
 
-      <Body/>
+      <Body />
     </main>
   );
 }

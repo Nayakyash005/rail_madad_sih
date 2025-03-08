@@ -132,7 +132,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
             fullWidth
             //   onClick={() => setIsStatusChangeOpen(!isStatusChangeOpen)}
             onClick={() =>
-              setComplaint({ ...complaint, status: "In-progress" })
+              setComplaint({ ...complaint, status: "in-progress" })
             }
           >
             in-progress

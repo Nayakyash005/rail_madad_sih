@@ -34,3 +34,27 @@ export const getUserById = async (phone, setError) => {
     }
   }
 };
+
+export const checkAdmin = async () => {
+  try {
+    const res = await fetch(
+      process.env.REACT_APP_SERVER_URL + "/api/Auth/checkAccess",
+      {
+        credentials: "include",
+      }
+    );
+    if (res.status == 403) {
+      console.log("returning");
+      return false;
+    }
+    console.log("res is ", res);
+    if (res.ok) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.log("err", err);
+    // throw new Error(err);
+    return false;
+  }
+};
