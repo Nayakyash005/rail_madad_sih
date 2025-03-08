@@ -46,7 +46,6 @@ import {
 // import { v4 as uuidv4 } from 'uuid';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 // import EditIcon from "@mui/icons-material/Edit";
-// import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 
 const createRandomInvoiceData = (numInvoices) => {
