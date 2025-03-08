@@ -52,7 +52,6 @@ import { getComplaintById } from "../../requests/complaint";
 import { AiFillDatabase } from "react-icons/ai";
 import { getUserById } from "../../requests/users";
 import axios from "axios";
-// import { data } from "@remix-run/router/dist/utils";
 const StyledPriorityBanner = styled(Box)(({ theme, priority }) => ({
   width: "100%",
   height: "4px",
