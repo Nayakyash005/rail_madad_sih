@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import ChatBot from "../ChatBot";
 import Markdown from "react-markdown";
 import { useLoaderData } from "react-router-dom";
 import { cn } from "../../../lib/utils";

@@ -7,7 +7,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  // TablePagination,
 } from "../../../components/ui/Table";
 import { TablePagination } from "@mui/material";
 import { getAllUsers } from "../../../requests/users";

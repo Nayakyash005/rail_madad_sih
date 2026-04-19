@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import express from "express";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
 
@@ -53,7 +52,6 @@ import { getComplaintById } from "../../requests/complaint";
 import { AiFillDatabase } from "react-icons/ai";
 import { getUserById } from "../../requests/users";
 import axios from "axios";
-// import { data } from "@remix-run/router/dist/utils";
 const StyledPriorityBanner = styled(Box)(({ theme, priority }) => ({
   width: "100%",
   height: "4px",
@@ -104,7 +102,6 @@ const StatusChanged = ({ setComplaint, complaint }) => (
       <button
         variant="outlined"
         fullWidth
-        //   onClick={() => setComplaint({...complaintSample,"status":"In-progress"})}
       >
         Change Status
       </button>

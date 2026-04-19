@@ -74,7 +74,6 @@ const ComplaintDetails = () => {
         alt="Image... "
       />
 
-      {/* Description */}
       <div className="bg-muted py-3 px-4 rounded-sm">
         <h3 className="text-muted-foreground">
           <b>Complaint Description</b>
@@ -82,7 +81,6 @@ const ComplaintDetails = () => {
         <p className="text-sm mt-0.5">{complaint.description}</p>
       </div>
 
-      {/* Info Cards */}
       <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         <Tile
           Icon={AccessTimeIcon}

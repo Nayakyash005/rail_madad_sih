@@ -33,7 +33,6 @@ const buttonVariants = cva(
 
 /**
  * @param {{
- *    className: string,
  *    asChild: boolean,
  *    size: "default" | "sm" | "lg" | "icon",
  *    variant: "default" | "custom" | "destructive" | "outline" | "ghost" | "link",

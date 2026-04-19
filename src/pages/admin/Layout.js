@@ -29,8 +29,6 @@ export default function Layout() {
         </Link>
         <hr />
 
-        {/* DASHBOARD */}
-        {/* <h5 className="hidden lg:block text-lg p-2 font-bold">Dashboard</h5> */}
         <ul className="grid grid-cols-4 lg:flex lg:flex-col gap-1 py-2 lg:py-4 w-full lg:w-auto justify-around">
           <SidebarLink path={path} href="/admin">
             <RiDashboardFill />
