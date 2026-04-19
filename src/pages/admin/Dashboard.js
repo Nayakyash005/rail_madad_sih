@@ -14,8 +14,8 @@ export default function Dashboard() {
       <div className="grid grid-cols-4 w-full gap-4">
         <Tile title={"Total Complaints"} value={complaintData.count} />
         <Tile title={"Pending Complaints"} value={complaintData.pending} />
-        <Tile title="Users" value={700} />
-        <Tile title="Products" value={50} />
+        <Tile title="Users" value={7} />
+        <Tile title="Testimonials" value={50} />
       </div>
     </section>
   );

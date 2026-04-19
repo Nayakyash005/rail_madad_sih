@@ -27,7 +27,7 @@ function ComplaintForm({ setShowChatbot }) {
             "Content-type": "multipart/form-data",
           },
           withCredentials: true,
-        }
+        },
       );
 
       console.log("responce is ", res);
@@ -81,7 +81,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   function showChatbot(complaintId) {
-    navigate("/complaint/" + complaintId);
+    navigate("/my-complaints/" + complaintId);
   }
 
   return (

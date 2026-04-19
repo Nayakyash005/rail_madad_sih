@@ -26,7 +26,10 @@ function ComplaintCard(complaint) {
     <>
       <img
         className="w-full max-w-md max-h-96 object-contain"
-        src={complaint.image_url}
+        src={
+          complaint?.image_url ||
+          "https://images.pexels.com/photos/2526935/pexels-photo-2526935.jpeg?_gl=1*1yqznh4*_ga*NTEwMjg0NzgzLjE3NzIzODYxNDg.*_ga_8JE65Q40S6*czE3NzIzODYxNDgkbzEkZzEkdDE3NzIzODYxNjAkajQ4JGwwJGgw"
+        }
         alt="Image... "
       />
 
@@ -44,7 +47,7 @@ function ComplaintCard(complaint) {
           Icon={CalendarIcon}
           label="Filed"
           value={new Date(
-            complaint.createdAt || "2 oct 1869"
+            complaint.createdAt || "2 oct 1869",
           ).toLocaleDateString("en-UK", {
             month: "short",
             day: "2-digit",
@@ -75,24 +78,43 @@ function ComplaintCard(complaint) {
               progress * 100
             }%, hsl(210, 40%, 90.1%) 0%)`,
           }}
-        >
-        </div>
+        ></div>
 
         <ul className="h-36 flex text-sm flex-col max-w-fit justify-between">
           <li className="flex items-center gap-4">
-            <FaCircle className={cn("relative size-2", progress >= 0 ? "text-green-500" : "text-gray-400")} />
+            <FaCircle
+              className={cn(
+                "relative size-2",
+                progress >= 0 ? "text-green-500" : "text-gray-400",
+              )}
+            />
             <span>Pending</span>
           </li>
           <li className="flex items-center gap-4">
-            <FaCircle className={cn("relative size-2", progress >= 0.33 ? "text-green-500" : "text-gray-400")} />
+            <FaCircle
+              className={cn(
+                "relative size-2",
+                progress >= 0.33 ? "text-green-500" : "text-gray-400",
+              )}
+            />
             <span>Registered</span>
           </li>
           <li className="flex items-center gap-4">
-            <FaCircle className={cn("relative size-2", progress >= 0.66 ? "text-green-500" : "text-gray-400")} />
+            <FaCircle
+              className={cn(
+                "relative size-2",
+                progress >= 0.66 ? "text-green-500" : "text-gray-400",
+              )}
+            />
             <span>In Progress</span>
           </li>
           <li className="flex items-center gap-4">
-            <FaCircle className={cn("relative size-2", progress >= 0.99 ? "text-green-500" : "text-gray-400")} />
+            <FaCircle
+              className={cn(
+                "relative size-2",
+                progress >= 0.99 ? "text-green-500" : "text-gray-400",
+              )}
+            />
             <span>Resolved</span>
           </li>
         </ul>

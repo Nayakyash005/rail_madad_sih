@@ -39,6 +39,7 @@ import {
   MdFilterList,
   MdContentCopy,
 } from "react-icons/md";
+import { formatDateToDDMMYYYY } from "../../lib/utils";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 // import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 // import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
@@ -74,7 +75,7 @@ const createRandomInvoiceData = (numInvoices) => {
     const project =
       projectNames[Math.floor(Math.random() * projectNames.length)];
     const dueDate = new Date(
-      Date.now() - Math.random() * 100000000000
+      Date.now() - Math.random() * 100000000000,
     ).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
@@ -147,19 +148,26 @@ const InvoiceListPage = () => {
     setselectedInvoice(invoice);
   };
 
-  const handleDelete = () => {
-    const updatedInvoices = filteredInvoices.filter(
-      (invoice) => invoice.invoiceId !== selectedInvoices.invoiceId
+  const handleDelete = async () => {
+    // const updatedInvoices = filteredInvoices.filter(
+    //   (invoice) => invoice.invoiceId !== selectedInvoices.invoiceId,
+    // );
+    // setFilteredInvoices(updatedInvoices);
+    // setInvoices(updatedInvoices); // Update the state with the filtered invoices
+    // handleClose();
+    console.log("id is", selectedInvoices._id);
+    const updatedInvoices = await axios.delete(
+      `${server}/api/complaints/${selectedInvoices._id}`,
     );
-    setFilteredInvoices(updatedInvoices);
-    setInvoices(updatedInvoices); // Update the state with the filtered invoices
-    handleClose();
+    console.log(updatedInvoices);
+    setFilteredInvoices(updatedInvoices.data.remainingComplaints);
+    setInvoices(updatedInvoices.data.remainingComplaints);
   };
 
   const handleClone = () => {
     // Find the index of the selected invoice
     const selectedIndex = filteredInvoices.findIndex(
-      (invoice) => invoice.id === selectedInvoices.id
+      (invoice) => invoice.id === selectedInvoices.id,
     );
 
     // Clone the selected invoice
@@ -230,7 +238,7 @@ const InvoiceListPage = () => {
       console.log(filters);
       if (filters.status !== "") {
         setFilteredInvoices((fi) =>
-          fi.filter((e) => e.status === filters.status)
+          fi.filter((e) => e.status === filters.status),
         );
       }
       if (filters.time !== "") {
@@ -308,7 +316,7 @@ const InvoiceListPage = () => {
 
   const fetchAllComplaints = async () => {
     const response = await axios.get(
-      `${server}/api/complaints/getAllComplaints`
+      `${server}/api/complaints/getAllComplaints`,
     );
     if (response) {
       console.log("responce", response);
@@ -318,35 +326,9 @@ const InvoiceListPage = () => {
   };
   const paginatedInvoices = invoices.slice(
     page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
+    page * rowsPerPage + rowsPerPage,
   );
   useEffect(() => {
-    const fetchInvoices = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/admin/invoices`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        if (response.data && response.data.invoices) {
-          const reversedInvoices = response.data.invoices.reverse();
-          setInvoices(reversedInvoices);
-        } else {
-          console.error("Empty response data or unexpected format");
-        }
-      } catch (error) {
-        console.error("Error fetching invoices:", error);
-      }
-    };
-
-    // fetchInvoices();
-    // Temporary: Use random data if API call fails
-    // const data = createRandomInvoiceData(9);
     const fetchComplaint = async () => {
       const data = await fetchAllComplaints();
       console.log("data is ", data);
@@ -363,19 +345,6 @@ const InvoiceListPage = () => {
     fetchComplaint();
   }, []);
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handlePrintSettings = () => {
-    setPrintSettingsOpen(true);
-    handleMenuClose();
-  };
-
   const handlePrintSettingsClose = () => {
     setPrintSettingsOpen(false);
   };
@@ -385,21 +354,6 @@ const InvoiceListPage = () => {
       ...prev,
       [event.target.name]: event.target.checked,
     }));
-  };
-
-  const handleSalesAnalysis = () => {
-    console.log("Sales Analysis clicked");
-    handleMenuClose();
-  };
-
-  const handleCreditNotes = () => {
-    console.log("Credit Notes clicked");
-    handleMenuClose();
-  };
-
-  const handleDisplayPreferences = () => {
-    console.log("Manage Display Preferences clicked");
-    handleMenuClose();
   };
 
   const columns = useMemo(
@@ -413,7 +367,7 @@ const InvoiceListPage = () => {
       { Header: "Status", accessor: "status" },
       { Header: "Action", accessor: "action" },
     ],
-    []
+    [],
   );
 
   const getStatusColor = (status) => {
@@ -717,11 +671,8 @@ const InvoiceListPage = () => {
                   <TableCell style={{ maxWidth: "50px" }}>
                     {invoice.description || "any Description"}
                   </TableCell>
-                  <TableCell>{invoice.dueDate || "03-04-2024"}</TableCell>
-                  <TableCell>
-                    {["high", "medium", "low"][Math.floor(Math.random() * 3)] ||
-                      "high"}
-                  </TableCell>
+                  <TableCell>{formatDateToDDMMYYYY(invoice.updatedAt)}</TableCell>
+                  <TableCell>{invoice.severity || "mid"}</TableCell>
                   <TableCell>
                     <Chip
                       label={invoice.status}

@@ -61,8 +61,8 @@ const StyledPriorityBanner = styled(Box)(({ theme, priority }) => ({
     priority === "high"
       ? theme.palette.error.main
       : priority === "medium"
-      ? theme.palette.warning.main
-      : theme.palette.success.main,
+        ? theme.palette.warning.main
+        : theme.palette.success.main,
 }));
 
 const StyledTimelineItem = styled(Box)(({ theme }) => ({
@@ -120,7 +120,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
             //   onClick={() => setIsStatusChangeOpen(!isStatusChangeOpen)}
             onClick={() => setComplaint({ ...complaint, status: "pending" })}
           >
-            pending
+            pendings
           </button>
         </DropdownMenuItem>
       </div>
@@ -205,7 +205,7 @@ const ComplaintDetails = () => {
         headers: {
           "content-type": "application/json",
         },
-      }
+      },
     );
     console.log("ressponce is ", responce);
     navigate("/admin/complaints");
@@ -222,7 +222,6 @@ const ComplaintDetails = () => {
     setComplaintId(id);
     // const responce2 = await getpassengerDetailsById(id);
     setData(responce?.data?.data);
-    let dummy;
     // console.log("phone is ", id);
     const responce2 = await getUserById(responce?.data?.data?.phone, setError);
 
@@ -246,16 +245,16 @@ const ComplaintDetails = () => {
       phoneNumber: responce2?.data?.phone,
       pnr: responce?.data?.data.pnr,
       description:
-        responce?.data?.data.pnr ||
+        responce?.data?.data?.description ||
         "The seat was broken and uncomfortable. The train was also delayed by 3 hours without any notice.",
       trainNumber: "12456",
-      status: responce?.data?.data.status || " In-Review",
-      dateFiled: "2024-09-29",
+      status: responce?.data?.data?.status || " In-Review",
+      dateFiled: responce?.data?.data?.updatedAt || "2024-09-29",
       resolved: false,
-      priority: "high",
+      priority: responce?.data?.data?.severity || "high",
       location: "Coach B7, Seat 42",
-      category: "Seat Issue",
-      image: responce?.data?.data.image_url,
+      category: responce?.data?.data?.category || "Seat Issue",
+      image: responce?.data?.data?.image_url,
       timeline: [
         {
           status: "Complaint Filed",

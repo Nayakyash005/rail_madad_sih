@@ -25,3 +25,16 @@ export const getStatusColor = (status) => {
       return "gray";
   }
 };
+
+export const formatDateToDDMMYYYY = (dateInput) => {
+  if (!dateInput) return "03-04-2024";
+
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) return dateInput;
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`;
+};
