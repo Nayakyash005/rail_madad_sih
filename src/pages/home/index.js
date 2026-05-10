@@ -14,17 +14,18 @@ function ComplaintForm({ setShowChatbot }) {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [complaintData, setComplaintData] = useState(null);
   const [humanLoading, setHumanLoading] = useState(false);
-
+  const [llm_tried, setLlmTried] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const body = {
+      let body = {
         description,
         pnr,
         image,
       };
       console.log("body is ", body);
+      body = { ...body, llm_tried: false };
       const res = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/complaints/done`,
         body,
@@ -38,11 +39,7 @@ function ComplaintForm({ setShowChatbot }) {
 
       console.log("responce is ", res);
       const responseData = res.data?.data ?? {};
-      setComplaintData({
-        complaintId: responseData.complaintId,
-        category: responseData.category,
-        subcategory: responseData.subcategory,
-      });
+      setComplaintData(responseData);
       setConfirmationOpen(true);
     } catch (error) {
       toast.error("Error accur");
@@ -55,29 +52,59 @@ function ComplaintForm({ setShowChatbot }) {
     setimage(e);
   };
 
-  const handleAgree = () => {
-    if (!complaintData?.complaintId) return;
+  const handleAgree = async () => {
+    // if (!complaintData?.complaintId) return;
     setConfirmationOpen(false);
-    toast.success("Complaint submitted succesfully");
-    setShowChatbot(complaintData.complaintId);
-  };
-
-  const handleNotAgree = async () => {
-    if (!complaintData?.complaintId) return;
-    setHumanLoading(true);
     try {
-      await axios.post(
+      const res = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/complaints/human-response`,
         {
-          complaintId: complaintData.complaintId,
-          agree: false,
+          agree: true,
+          complaintData,
         },
         {
           withCredentials: true,
         },
       );
-      toast.warn("Try again.");
+      setLlmTried(false);
+      toast.success("Complaint submitted succesfully");
+      console.log("Complaint ID:", res);
+      setShowChatbot(res.data.data.complaintId);
+    } catch (error) {
+      console.error("Error in conenecting to server", error);
+    }
+  };
+
+  const handleNotAgree = async () => {
+    // if (!complaintData?.complaintId) return;
+    setHumanLoading(true);
+    try {
+      const body = {
+        description,
+        pnr,
+        image,
+      };
       setConfirmationOpen(false);
+      if (!llm_tried) {
+        console.log("requiesting llm for the classification of complaint");
+        toast.info("Requesting LLM response, please wait...");
+        await checkLLm(body);
+      } else {
+        console.log("Calling human response API with complaint ID:");
+        await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/api/complaints/human-response`,
+          {
+            agree: false,
+            complaintData,
+          },
+          {
+            withCredentials: true,
+          },
+        );
+
+        toast.warn("Please check details again");
+        setLlmTried(false);
+      }
     } catch (error) {
       console.error("Human response error:", error);
       toast.error("Unable to request human review.");
@@ -86,6 +113,28 @@ function ComplaintForm({ setShowChatbot }) {
     }
   };
 
+  const checkLLm = async (body) => {
+    try {
+      setLlmTried(true);
+      body = { ...body, llm_tried: true };
+      const llm_response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/complaints/done`,
+        body,
+        {
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+          withCredentials: true,
+        },
+      );
+      const responseData = llm_response.data?.data ?? {};
+      setComplaintData(responseData);
+      setConfirmationOpen(true);
+    } catch (error) {
+      console.error("llm response error:", error);
+      toast.error("Unable to request llm response.");
+    }
+  };
   return (
     <>
       <form className="p-4 mt-4 md:p-8 border rounded-xl shadow bg-white text-black flex flex-col gap-4 w-full max-w-2xl mx-auto">
@@ -188,6 +237,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   function showChatbot(complaintId) {
+    console.log("Navigating to chatbot with complaint ID:", complaintId);
     navigate("/my-complaints/" + complaintId);
   }
 

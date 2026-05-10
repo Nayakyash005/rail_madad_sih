@@ -4,7 +4,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  
   TableHead,
   TableRow,
   Button,
@@ -47,8 +46,6 @@ import { formatDateToDDMMYYYY } from "../../lib/utils";
 // import { v4 as uuidv4 } from 'uuid';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 // import EditIcon from "@mui/icons-material/Edit";
-
-
 
 const InvoiceListPage = () => {
   const [invoices, setInvoices] = useState([]);
@@ -620,7 +617,9 @@ const InvoiceListPage = () => {
                   <TableCell style={{ maxWidth: "50px" }}>
                     {invoice.description || "any Description"}
                   </TableCell>
-                  <TableCell>{formatDateToDDMMYYYY(invoice.updatedAt)}</TableCell>
+                  <TableCell>
+                    {formatDateToDDMMYYYY(invoice.updatedAt)}
+                  </TableCell>
                   <TableCell>{invoice.severity || "mid"}</TableCell>
                   <TableCell>
                     <Chip
