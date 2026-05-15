@@ -14,15 +14,19 @@ export function wait(ms, data) {
 export const getStatusColor = (status) => {
   switch (status) {
     case "resolved":
-      return "#0f0";
+      return "#22c55e"; // soft green
+
     case "pending":
-      return "#ee0";
+      return "#f59e0b"; // amber
+
     case "rejected":
-      return "#f00";
+      return "#ef4444"; // soft red
+
     case "in-Progress":
-      return "#00f";
+      return "#7B1034"; // theme maroon
+
     default:
-      return "gray";
+      return "#9ca3af"; // gray
   }
 };
 

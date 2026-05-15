@@ -14,16 +14,21 @@ import { Button } from "./ui/Button";
 import { FaUserCircle } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
 import { FaClipboardList } from "react-icons/fa6";
+import { FaPhoneAlt } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { Avatar } from "@mui/material";
 
-const NavMenu = ({user}) => (
+const NavMenu = ({ user }) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="bg-primary text-white rounded-full">
-      <Avatar sx={{bgcolor: "#9e2452", padding: 3}}>{(user.firstName[0] + user?.lastName[0]).toUpperCase()}</Avatar>
+      <Avatar sx={{ bgcolor: "#9e2452", padding: 3 }}>
+        {(user.firstName[0] + user?.lastName[0]).toUpperCase()}
+      </Avatar>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
-      <DropdownMenuLabel>{user.firstName} {user.lastName}</DropdownMenuLabel>
+      <DropdownMenuLabel>
+        {user.firstName} {user.lastName}
+      </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <Link to="/admin">
         <DropdownMenuItem className="space-x-2">
@@ -61,7 +66,7 @@ export default function Navbar() {
 
   return (
     <nav className="shadow bg-white sticky top-0 z-50">
-      <div className="mx-auto h-full w-full flex items-center justify-between p-2 max-w-6xl">
+      <div className="mx-auto w-full flex items-center justify-between p-2 max-w-6xl gap-2">
         {/* Logo */}
         <Link
           to="/"
@@ -72,23 +77,53 @@ export default function Navbar() {
             src="/LOGO.jpg"
             alt=""
           />
-          <span className="text-3xl hidden md:inline text-primary">
+          <span className="text-2xl hidden sm:inline text-primary">
             RailMadad
           </span>
         </Link>
 
+        <div className="hidden lg:flex items-center gap-3">
+          <div className="bg-[#E28B3E] text-white px-4 py-2 rounded-md flex items-center font-semibold text-2xl">
+            <FaPhoneAlt className="text-xl" />
+            <span>139</span>
+          </div>
+
+          <p className="text-gray-700 text-lg">
+            for Security/Medical Assistance
+          </p>
+        </div>
+
         {session.user ? (
           <NavMenu user={session.user} />
         ) : (
-          <p className="space-x-2">
-            <Link to="/auth/signin" className="text-gray-700 hover:text-black">
-              <Button variant="outline">Login</Button>
+          // <p className="space-x-2">
+          //   <Link to="/auth/signin" className="text-gray-700 hover:text-black">
+          //     <Button variant="outline">Login</Button>
+          //   </Link>
+          //   <span>or</span>
+          //   <Link to="/auth/signup" className="text-gray-700 hover:text-black">
+          //     <Button variant="outline">Signup</Button>
+          //   </Link>
+          // </p>
+          <div className="flex items-center gap-3">
+            <Link to="/auth/signin">
+              <Button
+                variant="outline"
+                className="rounded-md border-0 px-3 sm:px-6 text-sm sm:text-base border-[#d8d3e8] bg-[#f3f0ff] text-gray-800 hover:bg-[#7a183c] hover:text-white"
+              >
+                Log In
+              </Button>
             </Link>
-            <span>or</span>
-            <Link to="/auth/signup" className="text-gray-700 hover:text-black">
-              <Button variant="outline">Signup</Button>
+
+            <Link to="/auth/signup">
+              <Button
+                variant="outline"
+                className="rounded-md border-0 px-3 sm:px-6 text-sm sm:text-base border-[#eadfe0] bg-[#f3ebed] text-gray-800 hover:bg-[#7a183c] hover:text-white"
+              >
+                Sign Up
+              </Button>
             </Link>
-          </p>
+          </div>
         )}
       </div>
     </nav>

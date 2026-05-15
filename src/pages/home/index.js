@@ -5,6 +5,7 @@ import ImageUpload from "../../components/ComplaintImage/ImageUpload";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Body from "../../components/Body";
+import Footer from "../../components/Footer";
 
 function ComplaintForm({ setShowChatbot }) {
   const [image, setimage] = useState(null);
@@ -137,15 +138,15 @@ function ComplaintForm({ setShowChatbot }) {
   };
   return (
     <>
-      <form className="p-4 mt-4 md:p-8 border rounded-xl shadow bg-white text-black flex flex-col gap-4 w-full max-w-2xl mx-auto">
-        <h1 className="text-xl text-rail-dark sm:text-2xl font-bold">
+      <form className="p-4 sm:p-6 md:p-8 mt-4 border border-gray-200 rounded-2xl shadow-sm bg-white text-black flex flex-col gap-5 w-full max-w-3xl mx-auto">
+        <h1 className="text-2xl md:text-3xl text-[#7B1034] font-semibold">
           Grievance Detail
         </h1>
 
         <label htmlFor="pnr-input">
-          <h3 className="text-sm text-gray-600 mb-1">PNR number</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-2">PNR number</h3>
           <input
-            className="w-full border px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#7B1034]/20 focus:border-[#7B1034] transition appearance-none"
             id="pnr-input"
             name="pnr"
             type="number"
@@ -156,9 +157,11 @@ function ComplaintForm({ setShowChatbot }) {
         <ImageUpload onChange={handleFile} value={image || null} />
 
         <label htmlFor="description">
-          <h3 className="text-sm text-gray-600 mb-1">Description</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-2">
+            Description
+          </h3>
           <textarea
-            className="w-full border px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 min-h-[140px] outline-none focus:ring-2 focus:ring-[#7B1034]/20 focus:border-[#7B1034] transition resize-none"
             name="description"
             id="description"
             rows={4}
@@ -166,7 +169,11 @@ function ComplaintForm({ setShowChatbot }) {
           ></textarea>
         </label>
 
-        <Button onClick={handleSubmit} disabled={loading}>
+        <Button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="w-full sm:w-fit sm:self-end bg-[#7B1034] hover:bg-[#5f0c28] text-white px-8 py-3 rounded-lg text-base"
+        >
           {loading ? "Submitting..." : "Submit"}
         </Button>
       </form>
@@ -242,12 +249,13 @@ export default function Home() {
   }
 
   return (
-    <main className="w-full flex flex-col overflow-y-scroll">
-      <div className="w-full min-h-screen flex-grow mx-auto max-w-4xl sm:px-4 md:px-8">
-        <ComplaintForm setShowChatbot={showChatbot} />
-      </div>
-
-      <Body />
-    </main>
+    <>
+      <main className="w-full flex flex-col overflow-y-scroll">
+        <div className="w-full min-h-screen flex-grow mx-auto max-w-5xl px-3 sm:px-4 md:px-8">
+          <ComplaintForm setShowChatbot={showChatbot} />
+        </div>
+      </main>
+      <Footer />
+    </>
   );
 }
