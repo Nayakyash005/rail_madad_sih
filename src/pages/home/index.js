@@ -43,7 +43,7 @@ function ComplaintForm({ setShowChatbot }) {
       setComplaintData(responseData);
       setConfirmationOpen(true);
     } catch (error) {
-      toast.error("Error accur");
+      toast.error(`Error occur`);
       console.log("error is ", error);
     } finally {
       setLoading(false);
@@ -250,7 +250,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="w-full flex flex-col overflow-y-scroll">
+      <main className="w-full flex flex-col">
         <div className="w-full min-h-screen flex-grow mx-auto max-w-5xl px-3 sm:px-4 md:px-8">
           <ComplaintForm setShowChatbot={showChatbot} />
         </div>
