@@ -27,7 +27,7 @@ function ComplaintCard(complaint) {
   return (
     <div className="bg-white border border-gray-200 rounded-3xl shadow-sm p-4 sm:p-5 space-y-4">
       <img
-        className="w-full rounded-2xl h-52 sm:h-64 object-cover bg-gray-100"
+        className="w-full max-w-[260px] sm:max-w-sm rounded-2xl aspect-[4/3] object-cover bg-gray-100 border border-gray-200 mx-auto"
         src={
           complaint?.image_url ||
           "https://images.pexels.com/photos/2526935/pexels-photo-2526935.jpeg?_gl=1*1yqznh4*_ga*NTEwMjg0NzgzLjE3NzIzODYxNDg.*_ga_8JE65Q40S6*czE3NzIzODYxNDgkbzEkZzEkdDE3NzIzODYxNjAkajQ4JGwwJGgw"

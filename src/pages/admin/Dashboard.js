@@ -15,7 +15,7 @@ export default function Dashboard() {
         <Tile title={"Total Complaints"} value={complaintData.count} />
         <Tile title={"Pending Complaints"} value={complaintData.pending} />
         <Tile title="Users" value={7} />
-        <Tile title="Testimonials" value={50} />
+        {/* <Tile title="Testimonials" value={50} /> */}
       </div>
     </section>
   );

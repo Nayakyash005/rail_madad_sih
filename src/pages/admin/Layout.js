@@ -45,10 +45,10 @@ export default function Layout() {
             <span className="text-xs lg:text-base">Users</span>
           </SidebarLink>
 
-          <SidebarLink path={path} href="/admin/testimonials">
+          {/* <SidebarLink path={path} href="/admin/testimonials">
             <AiFillFileText />
             <span className="text-xs lg:text-base">Testimonials</span>
-          </SidebarLink>
+          </SidebarLink> */}
         </ul>
       </div>
 

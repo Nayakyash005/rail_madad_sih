@@ -103,7 +103,7 @@ const ComplaintCard = (complaint) => (
     className="flex flex-col sm:flex-row gap-4 p-4 bg-white border border-gray-200 rounded-2xl hover:border-[#7B1034]/20 hover:shadow-md transition-all duration-200"
   >
     {/* Image */}
-    <div className="w-full sm:w-auto h-40 sm:h-24 sm:size-24 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+    <div className="w-full sm:w-[110px] h-20 rounded-xl overflow-hidden bg-gray-100 shrink-0">
       <img
         className="h-full w-full object-cover"
         src={complaint.image_url}
@@ -134,13 +134,37 @@ const ComplaintCard = (complaint) => (
         </div>
 
         {/* Status */}
-        <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-[#f8f4f6] shrink-0 self-start">
+        <div
+          className="flex items-center justify-center gap-2 px-3 py-1 rounded-full shrink-0 self-start"
+          style={{
+            backgroundColor:
+              complaint.status === "resolved"
+                ? "#ecfdf3"
+                : complaint.status === "pending"
+                  ? "#fff7ed"
+                  : complaint.status === "rejected"
+                    ? "#fef2f2"
+                    : "#f3f0ff",
+          }}
+        >
           <FaCircle
             className="size-2"
             color={getStatusColor(complaint.status)}
           />
 
-          <p className="text-xs sm:text-sm font-medium text-[#7B1034] capitalize whitespace-nowrap">
+          <p
+            className="text-xs sm:text-sm font-medium capitalize whitespace-nowrap"
+            style={{
+              color:
+                complaint.status === "resolved"
+                  ? "#166534"
+                  : complaint.status === "pending"
+                    ? "#c2410c"
+                    : complaint.status === "rejected"
+                      ? "#dc2626"
+                      : "#7B1034",
+            }}
+          >
             {complaint.status}
           </p>
         </div>

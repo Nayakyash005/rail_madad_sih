@@ -341,7 +341,7 @@ const InvoiceListPage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="max-w-7xl mx-auto px-3 sm:px-5 py-4 sm:py-6">
       <Dialog open={printSettingsOpen} onClose={handlePrintSettingsClose}>
         <DialogTitle>Print Settings</DialogTitle>
         <DialogContent>
@@ -385,263 +385,129 @@ const InvoiceListPage = () => {
         }
       ) : (
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "1rem",
-            }}
-          >
-            <div style={{ display: "flex", gap: 18 }}>
-              <TextField
-                className="bg-white "
-                placeholder="Search Invoices"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                variant="outlined"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MdSearch />
-                    </InputAdornment>
-                  ),
-                }}
-                // size="large"
-              />
+          <div className="mb-5">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#1f2937]">
+              Complaints
+            </h1>
 
-              <Select
-                value={type}
-                name="status"
-                onChange={(e) => {
-                  onFilterChange("status", e.target.value);
-                  setType(e.target.value);
-                }} // filter change is a function to filter the data
-                displayEmpty
-                style={{
-                  backgroundColor: "white",
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                }}
-              >
-                <MenuItem
-                  value=""
-                  style={{
-                    width: "full",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  All Complaints
-                </MenuItem>
-                <MenuItem
-                  value="Paid"
-                  style={{
-                    width: "full",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Paid Invoices
-                </MenuItem>
-                <MenuItem
-                  value="Unpaid"
-                  style={{
-                    width: "full",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Unpaid Invoices
-                </MenuItem>
-                <MenuItem
-                  value="Partially Paid"
-                  style={{
-                    width: "full",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Partially Paid Invoices
-                </MenuItem>
-                <MenuItem
-                  value="Overdue"
-                  style={{
-                    width: "full",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Overdue
-                </MenuItem>
-              </Select>
-
-              <Select
-                className="bg-white "
-                value={sortBy}
-                onChange={(e) => sortData(filteredInvoices, e.target.value)}
-                displayEmpty
-                size="small"
-              >
-                <MenuItem value="">Sort</MenuItem>
-                <MenuItem value="client">Client</MenuItem>
-                <MenuItem value="date">Date</MenuItem>
-                <MenuItem value="amount">Amount</MenuItem>
-              </Select>
-
-              <Select
-                className="bg-white "
-                value={Name}
-                name="name"
-                onChange={(e) => {
-                  onFilterChange("name", e.target.value);
-                  setName(e.target.value);
-                }}
-                displayEmpty
-              >
-                <MenuItem disabled selected value="">
-                  By Names
-                </MenuItem>
-                {allNames?.map((name, index) => (
-                  <MenuItem
-                    key={index} // Adding a unique key prop
-                    value={name}
-                    style={{ fontSize: "1rem", fontWeight: "bold" }}
-                  >
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-
-              <Stack
-                className="bg-white "
-                label="Controlled picker"
-                component="DateRangePicker"
-              >
-                {/* <DateRangePicker value={dateRange} onChange={(newValue) => setDateRange(newValue)} /> */}
-              </Stack>
-            </div>
-
-            <Button
-              startIcon={<MdFilterList />}
-              variant="outlined"
-              size="small"
-              onClick={(e) => {
-                setAnchorEl2(e.currentTarget);
-              }}
-            >
-              Filter
-            </Button>
-            <Menu
-              anchorEl={anchorEl2}
-              open={Boolean(anchorEl2)}
-              onClose={() => {
-                setAnchorEl2(null);
-              }}
-            >
-              <MenuItem
-                onClick={() => {
-                  onFilterChange("time", "cmonth");
-                  setAnchorEl2(null); // Close the menu after selecting an option
-                  setTimeType("cmonth");
-                }}
-              >
-                This Month
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  onFilterChange("time", "lmonth");
-                  setAnchorEl2(null);
-                  setTimeType("lmonth");
-                }}
-              >
-                Last Month
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  onFilterChange("time", "cyear");
-                  setAnchorEl2(null);
-                  setTimeType("cyear");
-                }}
-              >
-                Current Year
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  onFilterChange("time", "lyear");
-                  setAnchorEl2(null);
-                  setTimeType("lyear");
-                }}
-              >
-                Last Year
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  onFilterChange("time", "");
-                  setAnchorEl2(null);
-                  setTimeType("All Time");
-                }}
-              >
-                All Time
-              </MenuItem>
-            </Menu>
+            <p className="text-sm text-gray-500 mt-1">
+              Manage and track all registered complaints
+            </p>
           </div>
-          <Table className="bg-slate-50 shadow border">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell key={column.accessor}>{column.Header}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedInvoices.map((invoice) => (
-                <TableRow key={invoice._id}>
-                  <TableCell>
-                    <IconButton size="small">
-                      <MdStarBorder />
-                    </IconButton>
-                    {invoice._id}
-                  </TableCell>
-                  <TableCell>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <Avatar
-                        src={`/path-to-client-logo/${invoice.client}.png`}
-                        alt={invoice.client}
-                        style={{ marginRight: "0.5rem" }}
+          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <Table className="bg-white">
+              <TableHead className="bg-[#faf7f8]">
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.accessor}
+                      sx={{
+                        fontWeight: 700,
+                        color: "#374151",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      {column.Header}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedInvoices.map((invoice) => (
+                  <TableRow
+                    key={invoice._id}
+                    hover
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#fcfafb",
+                      },
+                    }}
+                  >
+                    <TableCell>
+                      {/* <IconButton size="small">
+                        <MdStarBorder />
+                      </IconButton> */}
+                      {invoice._id}
+                    </TableCell>
+                    <TableCell>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Avatar
+                          src={`/path-to-client-logo/${invoice.client}.png`}
+                          alt={invoice.client}
+                          style={{ marginRight: "0.5rem" }}
+                        />
+                        {invoice.phone}
+                      </div>
+                    </TableCell>
+                    <TableCell>{invoice.pnr}</TableCell>
+                    <TableCell
+                      sx={{
+                        maxWidth: 260,
+                        color: "#4b5563",
+                      }}
+                    >
+                      <div className="line-clamp-2">
+                        {invoice.description || "No description"}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {formatDateToDDMMYYYY(invoice.updatedAt)}
+                    </TableCell>
+                    <TableCell>{invoice.severity || "mid"}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={invoice.status}
+                        size="small"
+                        sx={{
+                          fontWeight: 600,
+                          borderRadius: "999px",
+                          bgcolor:
+                            invoice.status === "resolved"
+                              ? "#ecfdf3"
+                              : invoice.status === "pending"
+                                ? "#fff7ed"
+                                : invoice.status === "rejected"
+                                  ? "#fef2f2"
+                                  : "#f3f0ff",
+
+                          color:
+                            invoice.status === "resolved"
+                              ? "#166534"
+                              : invoice.status === "pending"
+                                ? "#c2410c"
+                                : invoice.status === "rejected"
+                                  ? "#dc2626"
+                                  : "#7B1034",
+                        }}
                       />
-                      {invoice.phone}
-                    </div>
-                  </TableCell>
-                  <TableCell>{invoice.pnr}</TableCell>
-                  <TableCell style={{ maxWidth: "50px" }}>
-                    {invoice.description || "any Description"}
-                  </TableCell>
-                  <TableCell>
-                    {formatDateToDDMMYYYY(invoice.updatedAt)}
-                  </TableCell>
-                  <TableCell>{invoice.severity || "mid"}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={invoice.status}
-                      color={getStatusColor(invoice.status)}
-                      size="small"
-                      style={{ color: getStatusTextColor(invoice.status) }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      size="small"
-                      onClick={(event) => handleClick(event, invoice)}
-                    >
-                      <MdMoreVert />
-                    </IconButton>
-                    <Menu
-                      anchorEl={anchorEl3}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        sx={{
+                          borderRadius: "10px",
+                          "&:hover": {
+                            backgroundColor: "#f3f0ff",
+                          },
+                        }}
+                        size="small"
+                        onClick={(event) => handleClick(event, invoice)}
+                      >
+                        <MdMoreVert />
+                      </IconButton>
+                      <Menu
+                        PaperProps={{
+                          sx: {
+                            borderRadius: 3,
+                            border: "1px solid #f1e6eb",
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+                            mt: 1,
+                          },
+                        }}
+                        anchorEl={anchorEl3}
+                        open={open}
+                        onClose={handleClose}
+                      >
+                        {/* <MenuItem
                         onClick={() => {
                           handleEdit();
                         }}
@@ -651,30 +517,40 @@ const InvoiceListPage = () => {
                           style={{ marginRight: "0.5rem" }}
                         />
                         Edit
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleOpen(invoice._id);
-                        }}
-                      >
-                        <MdOpenInNew
-                          fontSize="small"
-                          style={{ marginRight: "0.5rem" }}
-                        />
-                        Open
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleDelete();
-                        }}
-                      >
-                        <MdDelete
-                          fontSize="small"
-                          style={{ marginRight: "0.5rem" }}
-                        />
-                        Delete
-                      </MenuItem>
-                      <MenuItem
+                      </MenuItem> */}
+                        <MenuItem
+                          sx={{
+                            gap: 1.5,
+                            py: 1.2,
+                            fontSize: "0.95rem",
+                          }}
+                          onClick={() => {
+                            handleOpen(invoice._id);
+                          }}
+                        >
+                          <MdOpenInNew
+                            fontSize="small"
+                            style={{ marginRight: "0.5rem" }}
+                          />
+                          Open
+                        </MenuItem>
+                        <MenuItem
+                          sx={{
+                            gap: 1.5,
+                            py: 1.2,
+                            fontSize: "0.95rem",
+                          }}
+                          onClick={() => {
+                            handleDelete();
+                          }}
+                        >
+                          <MdDelete
+                            fontSize="small"
+                            style={{ marginRight: "0.5rem" }}
+                          />
+                          Delete
+                        </MenuItem>
+                        {/* <MenuItem
                         onClick={() => {
                           handleClone();
                         }}
@@ -684,29 +560,29 @@ const InvoiceListPage = () => {
                           style={{ marginRight: "0.5rem" }}
                         />
                         Clone
-                      </MenuItem>
-                    </Menu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      </MenuItem> */}
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
 
-          {/* Add TablePagination component */}
-          <TablePagination
-            component="div"
-            count={invoices.length} // Total number of invoices
-            page={page}
-            style={{
-              width: "full",
-              backgroundColor: "rgb(158 36 82)",
-              color: " white",
-            }}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[5, 8, 10, 25]} // Options for rows per page
-          />
+            {/* Add TablePagination component */}
+            <TablePagination
+              component="div"
+              count={invoices.length} // Total number of invoices
+              page={page}
+              sx={{
+                borderTop: "1px solid #f1f5f9",
+                bgcolor: "white",
+              }}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5, 8, 10, 25]} // Options for rows per page
+            />
+          </div>
         </>
       )}
     </div>
