@@ -4,6 +4,46 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import OtpForm from "./OTPform";
 import { toast } from "react-toastify";
+import { auth } from "../../../config/firebaseConfig";
+import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+
+let recaptchaVerifier;
+
+async function requestOTPSignup(phone) {
+  try {
+    if (!auth) {
+      toast.error("Firebase auth not initialized. Check .env file.");
+      return false;
+    }
+
+    if (!document.getElementById("recaptcha-container-signup")) {
+      toast.error("Recaptcha container not ready");
+      return false;
+    }
+
+    if (!recaptchaVerifier) {
+      recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container-signup",
+        { size: "invisible" },
+      );
+    }
+
+    const formattedPhone = `+91${phone}`;
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      formattedPhone,
+      recaptchaVerifier,
+    );
+
+    window.confirmationResultSignup = confirmationResult;
+    return true;
+  } catch (error) {
+    toast.error(error?.message || "Failed to send OTP");
+    console.log(error);
+    return false;
+  }
+}
 
 export default function Signup() {
   const [data, setData] = useState();
@@ -13,33 +53,49 @@ export default function Signup() {
   async function saveData(data) {
     console.log(data);
 
-    setData(data);
-    setShowOtp(true);
+    const success = await requestOTPSignup(data.phone);
+
+    if (success) {
+      setData(data);
+      setShowOtp(true);
+      toast.success("OTP sent");
+    } else {
+      toast.error("Failed to send OTP");
+    }
 
     return null;
   }
 
   async function Handle_otp_submit(otp) {
-    console.log({data, otp});
-    // TODO: request backend to veriefy otp, create user, login user.
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/auth/signup`, {
-      method: "POST",
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({...data, otp}),
-      credentials: "include",
-    })
-    .then(res => res.json())
-    .catch(err => {
-      console.log(err);
-      return {success: false, message: "something went wrong"};
-    });
+    try {
+      const confirmationResult = window.confirmationResultSignup;
 
-    console.log(response);
+      if (!confirmationResult) {
+        toast.error("OTP session expired. Please request OTP again.");
+        return "OTP session expired";
+      }
 
-    if(response.success) {
-      navigate("/", {replace: true});
-    } else {
-      toast.error(response.message);
+      const userCredential = await confirmationResult.confirm(otp);
+      const idToken = await userCredential.user.getIdToken();
+
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...data, idToken }),
+          credentials: "include",
+        },
+      ).then((res) => res.json());
+
+      if (response.success) {
+        navigate("/", { replace: true });
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error(error?.message || "Invalid OTP");
+      console.log(error);
     }
   }
 
@@ -48,6 +104,7 @@ export default function Signup() {
       style={{ background: `url(${BG_URL})` }}
       className="min-h-screen w-full p-4 bg-cover bg-fixed bg-center bg-no-repeat flex items-center justify-center"
     >
+      <div id="recaptcha-container-signup"></div>
       <div className="flex w-full max-w-md flex-col rounded-2xl border bg-white text-black p-10 shadow-2xl">
         <a
           href="/"
@@ -63,7 +120,15 @@ export default function Signup() {
           Signup
         </h2>
 
-        {showOtp ? <OtpForm phone={data.phone} onChangePhoneClick={() => setShowOtp(false)} onSubmit={Handle_otp_submit} /> : <SignUpForm defaultData={data} onSubmit={saveData} />}
+        {showOtp ? (
+          <OtpForm
+            phone={data.phone}
+            onChangePhoneClick={() => setShowOtp(false)}
+            onSubmit={Handle_otp_submit}
+          />
+        ) : (
+          <SignUpForm defaultData={data} onSubmit={saveData} />
+        )}
 
         <Link className="mx-auto p-2 mb-4 hover:underline" to="/auth/signin">
           Log in?
@@ -84,16 +149,16 @@ export default function Signup() {
 /**
  * @param {{
  * defaultData: {
-*   firstName: string,
-*   lastName: string,
-*   phone: string,
-* }
+ *   firstName: string,
+ *   lastName: string,
+ *   phone: string,
+ * }
  * onSubmit({
  *   firstName: string,
  *   lastName: string,
  *   phone: string,
- * }) => Promise<void>}}param0 
- * @returns 
+ * }) => Promise<void>}}param0
+ * @returns
  */
 function SignUpForm({
   defaultData = {
@@ -108,7 +173,7 @@ function SignUpForm({
   const [error, seterror] = useState(false);
 
   function HandleChange(e) {
-    setData(p => ({...p, [e.target.name]: e.target.value}));
+    setData((p) => ({ ...p, [e.target.name]: e.target.value }));
   }
 
   async function HandleSubmit(e) {
@@ -116,7 +181,7 @@ function SignUpForm({
     setLoading(true);
 
     const error = await onSubmit(data);
-    if(error) {
+    if (error) {
       seterror(error);
     }
 
@@ -124,10 +189,7 @@ function SignUpForm({
   }
 
   return (
-    <form
-      className="mb-4 flex flex-col gap-4"
-      onSubmit={HandleSubmit}
-    >
+    <form className="mb-4 flex flex-col gap-4" onSubmit={HandleSubmit}>
       <label>
         <h6 className="mb-1 text-sm text-gray-600">First name</h6>
         <div className="relative w-full rounded bg-white">
@@ -139,7 +201,7 @@ function SignUpForm({
             type="text"
             onChange={HandleChange}
             required
-            />
+          />
         </div>
       </label>
 
@@ -172,10 +234,12 @@ function SignUpForm({
           />
         </div>
       </label>
-      
+
       {error && <p className="text-red-600 text-sm">{error}</p>}
 
-      <Button disabled={loading} className="mt-2 font-semibold">Submit</Button>
+      <Button disabled={loading} className="mt-2 font-semibold">
+        Submit
+      </Button>
     </form>
   );
 }

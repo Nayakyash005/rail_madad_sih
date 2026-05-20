@@ -12,7 +12,7 @@ function SessionProvider({ children }) {
     try {
       const res = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/auth/session`,
-        { credentials: "include" }
+        { credentials: "include" },
       );
       const session = await res.json();
       setUser(session.user);

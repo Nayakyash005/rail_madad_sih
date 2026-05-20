@@ -4,33 +4,54 @@ import { Button } from "../../../components/ui/Button";
 import { toast } from "react-toastify";
 import OtpForm from "./OTPform";
 import { SessionContext } from "../../../context/Session";
-import {BG_URL} from "../Layout"
+import { BG_URL } from "../Layout";
+import { auth } from "../../../config/firebaseConfig";
+import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+
+let recaptchaVerifier;
 
 export async function requestOTP(phone) {
-  // try {
-  //   const response = await fetch(
-  //     `${process.env.REACT_APP_SERVER_URL}/api/auth/send-otp`,
-  //     {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ phone }),
-  //     }
-  //   ).then((res) => res.json());
-    
-  //   return !!response.success;
-  // } catch (error) {
-  //   toast.error("something went wrong");
-  //   console.log(error);
-  //   return false;
-  // }
+  console.log("Api call");
+  try {
+    if (!auth) {
+      toast.error("Firebase auth not initialized. Check .env file.");
+      return false;
+    }
 
-  return true;
+    if (!document.getElementById("recaptcha-container")) {
+      toast.error("Recaptcha container not ready");
+      return false;
+    }
+
+    if (!recaptchaVerifier) {
+      recaptchaVerifier = new RecaptchaVerifier(
+        auth, // ← auth first
+        "recaptcha-container", // ← string second
+        { size: "invisible" }, // ← options last
+      );
+    }
+
+    const formattedPhone = `+91${phone}`;
+    console.log("Requesting OTP for phone:", formattedPhone);
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      formattedPhone,
+      recaptchaVerifier,
+    );
+
+    window.confirmationResult = confirmationResult;
+    return true;
+  } catch (error) {
+    toast.error(error?.message || "Failed to send OTP");
+    console.log(error);
+    return false;
+  }
 }
 
 export default function Signin() {
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const {revalidateSession} = useContext(SessionContext);
+  const { revalidateSession } = useContext(SessionContext);
 
   const redirect = useNavigate();
 
@@ -45,25 +66,39 @@ export default function Signin() {
 
   async function handle_OTP_submit(otp) {
     try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/auth/signin`,{
-        method: "POST",
-        headers: {"Content-Type": 'application/json'},
-        body: JSON.stringify({phone, otp}),
-        credentials: "include",
-      }).then(res => res.json());
+      const confirmationResult = window.confirmationResult;
 
-      if(response.success) {
-        await revalidateSession();
-        redirect("/", {replace: true});
-        return null;
-      } else {
-        return response?.message || "An unexpected error occcured";
+      if (!confirmationResult) {
+        toast.error("OTP session expired. Please request OTP again.");
+        return "OTP session expired";
       }
 
+      // Verify OTP with Firebase and get idToken
+      const userCredential = await confirmationResult.confirm(otp);
+      const idToken = await userCredential.user.getIdToken();
+
+      // Send idToken and phone to backend
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/signin`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone, idToken }),
+          credentials: "include",
+        },
+      ).then((res) => res.json());
+
+      if (response.success) {
+        await revalidateSession();
+        redirect("/", { replace: true });
+        return null;
+      } else {
+        return response?.message || "An unexpected error occurred";
+      }
     } catch (error) {
-      toast.error("something went wrong");
+      toast.error(error?.message || "Invalid OTP");
       console.log(error);
-      return null;
+      return error?.message || "Something went wrong";
     }
   }
 
@@ -72,6 +107,7 @@ export default function Signin() {
       style={{ background: `url(${BG_URL})` }}
       className="min-h-screen p-4 w-full bg-cover bg-fixed bg-center bg-no-repeat flex items-center justify-center"
     >
+      <div id="recaptcha-container"></div>
       <div className="flex w-full max-w-md flex-col rounded-2xl border bg-white text-black p-4 sm:p-10 shadow-2xl">
         <a
           href="/"
@@ -88,7 +124,11 @@ export default function Signin() {
         </h2>
 
         {isOtpSent ? (
-          <OtpForm phone={phone} onChangePhoneClick={closeOtpScreen} onSubmit={handle_OTP_submit} />
+          <OtpForm
+            phone={phone}
+            onChangePhoneClick={closeOtpScreen}
+            onSubmit={handle_OTP_submit}
+          />
         ) : (
           <LoginForm data={phone} setData={handlePhoneSubmit} />
         )}
@@ -132,7 +172,7 @@ function LoginForm({ data, setData }) {
 
     const success = await requestOTP(phone);
 
-    if(success) {
+    if (success) {
       toast.success("OTP sent");
       setData(phone);
     } else {
