@@ -54,7 +54,8 @@ import { getUserById } from "../../requests/users";
 import axios from "axios";
 const StyledPriorityBanner = styled(Box)(({ theme, priority }) => ({
   width: "100%",
-  height: "4px",
+  height: "6px",
+  borderRadius: "999px",
   background:
     priority === "high"
       ? theme.palette.error.main
@@ -94,17 +95,9 @@ const StyledTimelineDot = styled(Box)(({ theme, active }) => ({
 
 const StatusChanged = ({ setComplaint, complaint }) => (
   <DropdownMenu style={{ width: "100%" }}>
-    <DropdownMenuTrigger
-      className="p-2 bg-white text-primary  rounded"
-      style={{ width: "100%", border: "2px solid rgb(158 36 82)" }}
-    >
+    <DropdownMenuTrigger className="w-full rounded-lg border border-[#d8d3e8] bg-[#f3f0ff] text-gray-800 hover:bg-[#7a183c] hover:text-white transition-all duration-200 py-3 font-medium text-[0.95rem]">
       {/* <FaUserCircle size={24} /> */}
-      <button
-        variant="outlined"
-        fullWidth
-      >
-        Change Status
-      </button>
+      <span>Change Status</span>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
       <div to="/admin">
@@ -117,7 +110,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
             //   onClick={() => setIsStatusChangeOpen(!isStatusChangeOpen)}
             onClick={() => setComplaint({ ...complaint, status: "pending" })}
           >
-            pendings
+            Pending
           </button>
         </DropdownMenuItem>
       </div>
@@ -132,7 +125,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
               setComplaint({ ...complaint, status: "in-progress" })
             }
           >
-            in-progress
+            In-progress
           </button>
         </DropdownMenuItem>
       </div>
@@ -148,7 +141,7 @@ const StatusChanged = ({ setComplaint, complaint }) => (
             //   onClick={() => setIsStatusChangeOpen(!isStatusChangeOpen)}
             onClick={() => setComplaint({ ...complaint, status: "resolved" })}
           >
-            resolved
+            Resolved
           </button>
         </DropdownMenuItem>
       </div>
@@ -179,14 +172,10 @@ const ComplaintDetails = () => {
     location: "Coach B7, Seat 42",
     category: "Seat Issue",
     timeline: [
-      { status: "Complaint Filed", date: "2024-09-29 10:30 AM", active: true },
-      { status: "Under Review", date: "2024-09-29 11:00 AM", active: true },
-      {
-        status: "Assigned to Department",
-        date: "2024-09-29 02:00 PM",
-        active: false,
-      },
-      { status: "Resolution", date: "Pending", active: false },
+      { status: "Complaint Filed" },
+      { status: "Pending" },
+      { status: "In Progress" },
+      { status: "Resolved" },
     ],
   });
   const navigate = useNavigate();
@@ -253,22 +242,10 @@ const ComplaintDetails = () => {
       category: responce?.data?.data?.category || "Seat Issue",
       image: responce?.data?.data?.image_url,
       timeline: [
-        {
-          status: "Complaint Filed",
-          date: "2024-09-29 10:30 AM",
-          active: true,
-        },
-        {
-          status: responce?.data?.data.status || "Under Review",
-          date: "2024-09-29 11:00 AM",
-          active: true,
-        },
-        {
-          status: "Assigned to Department",
-          date: "2024-09-29 02:00 PM",
-          active: false,
-        },
-        { status: "Resolution", date: "Pending", active: false },
+        { status: "Complaint Filed" },
+        { status: "Pending" },
+        { status: "In Progress" },
+        { status: "Resolved" },
       ],
     });
   };
@@ -295,31 +272,58 @@ const ComplaintDetails = () => {
     }
   }, [id]);
   return (
-    <Box sx={{ padding: 3, maxWidth: 800, margin: "auto" }}>
-      <Card elevation={3} sx={{ overflow: "hidden" }}>
+    <Box
+      sx={{
+        px: { xs: 2, sm: 3 },
+        py: 3,
+        maxWidth: 900,
+        margin: "auto",
+      }}
+    >
+      <Card
+        elevation={0}
+        sx={{
+          overflow: "hidden",
+          borderRadius: 4,
+          border: "1px solid #e5e7eb",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
+        }}
+      >
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
             {error}
           </Alert>
         </Snackbar>
 
-        <StyledPriorityBanner priority={complaint.priority} />
+        {/* <StyledPriorityBanner priority={complaint.priority} /> */}
 
-        <CardContent>
+        <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
           {/* Header Section */}
           <Box
             display="flex"
+            flexDirection={{ xs: "column", sm: "row" }}
             justifyContent="space-between"
-            alignItems="flex-start"
-            mb={3}
+            alignItems={{ xs: "flex-start", sm: "center" }}
+            gap={3}
+            mb={4}
           >
-            <Box display="flex" gap={2}>
+            {/* Left User Section */}
+            <Box
+              display="flex"
+              alignItems="center"
+              gap={2}
+              width="100%"
+              minWidth={0}
+            >
+              {/* Avatar */}
               <Avatar
                 sx={{
-                  width: 64,
-                  height: 64,
-                  bgcolor: "primary.main",
-                  fontSize: "1.5rem",
+                  width: 60,
+                  height: 60,
+                  bgcolor: "#7B1034",
+                  fontSize: "1.4rem",
+                  fontWeight: 700,
+                  flexShrink: 0,
                 }}
               >
                 {complaint.passengerName
@@ -328,20 +332,57 @@ const ComplaintDetails = () => {
                   .join("")}
               </Avatar>
 
-              <Box>
-                <Typography variant="h6" gutterBottom>
+              {/* User Info */}
+              <Box minWidth={0}>
+                <Typography
+                  sx={{
+                    fontSize: {
+                      xs: "1.15rem",
+                      sm: "1.4rem",
+                    },
+                    fontWeight: 700,
+                    color: "#1f2937",
+                    lineHeight: 1.2,
+                    mb: 1,
+                    wordBreak: "break-word",
+                  }}
+                >
                   {complaint.passengerName}
                 </Typography>
-                <Stack spacing={1}>
+
+                <Stack spacing={0.7}>
                   <Box display="flex" alignItems="center" gap={1}>
-                    <PhoneIcon fontSize="small" color="action" />
-                    <Typography variant="body2" color="text.secondary">
+                    <PhoneIcon
+                      sx={{
+                        fontSize: 18,
+                        color: "#6b7280",
+                      }}
+                    />
+
+                    <Typography
+                      sx={{
+                        fontSize: "0.95rem",
+                        color: "#6b7280",
+                      }}
+                    >
                       {complaint.phoneNumber}
                     </Typography>
                   </Box>
+
                   <Box display="flex" alignItems="center" gap={1}>
-                    <TrainIcon fontSize="small" color="action" />
-                    <Typography variant="body2" color="text.secondary">
+                    <TrainIcon
+                      sx={{
+                        fontSize: 18,
+                        color: "#6b7280",
+                      }}
+                    />
+
+                    <Typography
+                      sx={{
+                        fontSize: "0.95rem",
+                        color: "#6b7280",
+                      }}
+                    >
                       PNR: {complaint.pnr}
                     </Typography>
                   </Box>
@@ -349,29 +390,41 @@ const ComplaintDetails = () => {
               </Box>
             </Box>
 
-            <Box display="flex" alignItems="center" gap={1}>
-              <Chip
-                label={complaint.status}
-                color={complaint.resolved ? "success" : "warning"}
-                size="small"
-                sx={{ fontWeight: 500 }}
-              />
-              <IconButton size="small">
-                <EditIcon fontSize="small" />
-              </IconButton>
-              <IconButton size="small" color="error">
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Box>
+            {/* Status */}
+            <Chip
+              label={complaint.status}
+              size="small"
+              sx={{
+                fontWeight: 700,
+                fontSize: "0.85rem",
+                bgcolor: "#f8f1f4",
+                color: "#7B1034",
+                borderRadius: "999px",
+                px: 1,
+                height: 32,
+                alignSelf: {
+                  xs: "flex-start",
+                  sm: "center",
+                },
+                textTransform: "capitalize",
+              }}
+            />
           </Box>
 
           {/* Info Cards */}
-          <Grid container spacing={2} mb={3}>
+          <Grid container spacing={2.5} mb={4}>
             {[
               {
                 icon: <AccessTimeIcon />,
                 label: "Filed",
-                value: complaint.dateFiled,
+                value: new Date(complaint.dateFiled).toLocaleDateString(
+                  "en-UK",
+                  {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                  },
+                ),
               },
               {
                 icon: <LocationIcon />,
@@ -390,13 +443,32 @@ const ComplaintDetails = () => {
               },
             ].map((item, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
-                <Paper elevation={0} sx={{ p: 1.5, bgcolor: "grey.50" }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 2,
+                    bgcolor: "#faf7f8",
+                    border: "1px solid #f1e6eb",
+                    borderRadius: 3,
+                    height: "100%",
+                    minHeight: 80,
+                    display: "flex",
+                    flexDirection: "column",
+                    // justifyContent: "space-between",
+                  }}
+                >
                   <Box display="flex" alignItems="center" gap={1}>
                     {React.cloneElement(item.icon, {
                       color: "action",
                       fontSize: "small",
                     })}
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography
+                      sx={{
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        color: "#6b7280",
+                      }}
+                    >
                       {item.label}
                     </Typography>
                   </Box>
@@ -409,9 +481,29 @@ const ComplaintDetails = () => {
           </Grid>
 
           {/* Description */}
-          <div className="flex-cols">
-            <Paper elevation={0} sx={{ p: 2, bgcolor: "grey.50", mb: 3 }}>
-              <Typography variant="subtitle2" gutterBottom>
+          <div className="flex flex-col lg:grid lg:grid-cols-[1.4fr_0.8fr] gap-4 items-stretch">
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                bgcolor: "#faf7f8",
+                border: "1px solid #f1e6eb",
+                borderRadius: 4,
+                flex: 1,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                // justifyContent: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: 700,
+                  color: "#1f2937",
+                  mb: 1.5,
+                }}
+              >
                 Complaint Description
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -419,11 +511,12 @@ const ComplaintDetails = () => {
               </Typography>
             </Paper>
             <img
+              className="w-full h-64 lg:h-full max-h-[320px] object-cover rounded-2xl border border-gray-200"
               src={
                 complaint?.image ||
                 "https://firebasestorage.googleapis.com/v0/b/lucid-splicer-426105-u4.appspot.com/o/complaints%2F1727781709217_railway-station-2.jpg?alt=media&token=8c245040-21b0-46e3-87fb-bae32a799a19"
               }
-              alt="Image... "
+              alt="Complaint"
             />
           </div>
           {/* Timeline */}
@@ -431,21 +524,115 @@ const ComplaintDetails = () => {
             <Button
               onClick={() => setShowTimeline(!showTimeline)}
               endIcon={showTimeline ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-              sx={{ mb: 2 }}
+              sx={{
+                mb: 2,
+                color: "#7B1034",
+                fontWeight: 700,
+                fontSize: "1rem",
+                textTransform: "none",
+              }}
             >
               Status Timeline
             </Button>
+
             <Collapse in={showTimeline}>
-              <Box sx={{ pl: 2 }}>
-                {complaint.timeline.map((item, index) => (
-                  <StyledTimelineItem key={index} sx={{ mb: 2 }}>
-                    <StyledTimelineDot active={item.active} />
-                    <Typography variant="subtitle2">{item.status}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {item.date}
-                    </Typography>
-                  </StyledTimelineItem>
-                ))}
+              <Box
+                sx={{
+                  p: 3,
+                  borderRadius: 4,
+                  bgcolor: "#faf7f8",
+                  border: "1px solid #f1e6eb",
+                }}
+              >
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={2}
+                  justifyContent="space-between"
+                >
+                  {complaint.timeline.map((item, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        flex: 1,
+                        position: "relative",
+                        textAlign: "center",
+                      }}
+                    >
+                      {/* Line */}
+                      {index !== complaint.timeline.length - 1 && (
+                        <Box
+                          sx={{
+                            display: { xs: "none", sm: "block" },
+                            position: "absolute",
+                            top: 12,
+                            left: "55%",
+                            width: "90%",
+                            height: 2,
+                            bgcolor:
+                              (complaint.status === "pending" && index <= 1) ||
+                              (complaint.status === "in-progress" &&
+                                index <= 2) ||
+                              (complaint.status === "resolved" && index <= 3)
+                                ? "#7B1034"
+                                : "#e5e7eb",
+                            zIndex: 0,
+                          }}
+                        />
+                      )}
+
+                      {/* Dot */}
+                      <Box
+                        sx={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: "50%",
+                          mx: "auto",
+                          mb: 1,
+                          bgcolor:
+                            (complaint.status === "pending" && index <= 1) ||
+                            (complaint.status === "in-progress" &&
+                              index <= 2) ||
+                            (complaint.status === "resolved" && index <= 3)
+                              ? "#7B1034"
+                              : "#d1d5db",
+                          border: "4px solid white",
+                          boxShadow: "0 0 0 2px #f3e8ee",
+                          position: "relative",
+                          zIndex: 1,
+                        }}
+                      />
+
+                      {/* Status */}
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 600,
+                          color:
+                            (complaint.status === "pending" && index <= 1) ||
+                            (complaint.status === "in-progress" &&
+                              index <= 2) ||
+                            (complaint.status === "resolved" && index <= 3)
+                              ? "#7B1034"
+                              : "#6b7280",
+                        }}
+                      >
+                        {item.status}
+                      </Typography>
+
+                      {/* Date */}
+                      {/* <Typography
+                        variant="caption"
+                        sx={{
+                          color: "#9ca3af",
+                          mt: 0.5,
+                          display: "block",
+                        }}
+                      >
+                        {item.date}
+                      </Typography> */}
+                    </Box>
+                  ))}
+                </Stack>
               </Box>
             </Collapse>
           </Box>
@@ -453,9 +640,25 @@ const ComplaintDetails = () => {
           {/* Action Buttons */}
           <Box display="flex" gap={2} mt={3}>
             <Button
-              variant="contained"
               fullWidth
               onClick={() => setShowTimeline(!showTimeline)}
+              sx={{
+                borderRadius: "10px",
+                border: "1px solid #d8d3e8",
+                backgroundColor: "#f3f0ff",
+                color: "#1f2937",
+                textTransform: "none",
+                fontWeight: 500,
+                fontSize: "0.95rem",
+                boxShadow: "none",
+                py: 1.2,
+
+                "&:hover": {
+                  backgroundColor: "#7a183c",
+                  color: "white",
+                  boxShadow: "none",
+                },
+              }}
             >
               Track Status
             </Button>
@@ -475,10 +678,10 @@ const ComplaintDetails = () => {
           </Box>
           <div className="flex justify-end pt-4">
             <button
-              className="border bg-green-600 text-white rounded-lg p-2 right-0 flex hover:bg-green-700 hover:scale-95 gap-3"
+              className="bg-[#7B1034] text-white rounded-xl px-5 py-2.5 flex items-center gap-2 hover:bg-[#63102f] transition"
               onClick={handleSave}
             >
-              Save <SaveIcon />
+              Save
             </button>
           </div>
         </CardContent>

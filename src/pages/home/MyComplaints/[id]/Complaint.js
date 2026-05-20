@@ -11,21 +11,23 @@ import { FaCircle } from "react-icons/fa6";
 import { cn } from "../../../../lib/utils";
 
 const Tile = ({ Icon, label, value }) => (
-  <div className="bg-muted p-4 rounded-sm space-y-1">
-    <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
+  <div className="bg-white border border-gray-200 rounded-xl p-3 space-y-2 shadow-sm">
+    <div className="flex items-center gap-2 text-gray-500 text-sm">
       <Icon className="size-4" />
       <b>{label}</b>
     </div>
-    <p className="text-sm">{value}</p>
+    <p className="text-sm font-medium text-gray-800 break-words">
+      {value || "N/A"}
+    </p>
   </div>
 );
 
 function ComplaintCard(complaint) {
   const progress = getProgress(complaint.status);
   return (
-    <>
+    <div className="bg-white border border-gray-200 rounded-3xl shadow-sm p-4 sm:p-5 space-y-4">
       <img
-        className="w-full max-w-md max-h-96 object-contain"
+        className="w-full max-w-[260px] sm:max-w-sm rounded-2xl aspect-[4/3] object-cover bg-gray-100 border border-gray-200 mx-auto"
         src={
           complaint?.image_url ||
           "https://images.pexels.com/photos/2526935/pexels-photo-2526935.jpeg?_gl=1*1yqznh4*_ga*NTEwMjg0NzgzLjE3NzIzODYxNDg.*_ga_8JE65Q40S6*czE3NzIzODYxNDgkbzEkZzEkdDE3NzIzODYxNjAkajQ4JGwwJGgw"
@@ -34,15 +36,17 @@ function ComplaintCard(complaint) {
       />
 
       {/* Description */}
-      <div className="bg-muted py-3 px-4 rounded-sm">
-        <h3 className="text-muted-foreground">
+      <div className="bg-[#faf7f8] border border-[#f1e6eb] p-3 sm:p-4 rounded-2xl">
+        <h3 className="text-sm font-semibold text-[#7B1034]">
           <b>Complaint Description</b>
         </h3>
-        <p className="text-sm mt-0.5">{complaint.description}</p>
+        <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-2">
+          {complaint.description}
+        </p>
       </div>
 
       {/* Info Cards */}
-      <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+      <div className="grid gap-2 grid-cols-2 lg:grid-cols-4">
         <Tile
           Icon={CalendarIcon}
           label="Filed"
@@ -68,7 +72,7 @@ function ComplaintCard(complaint) {
       </div>
 
       {/* Timeline */}
-      <div className="w-fit pt-4 relative">
+      {/* <div className="w-fit pt-4 relative">
         <div
           className="absolute mx-5 my-2 w-0.5 overflow-visible"
           style={{
@@ -118,8 +122,38 @@ function ComplaintCard(complaint) {
             <span>Resolved</span>
           </li>
         </ul>
+      </div> */}
+      <div className="bg-[#faf7f8] border border-[#f1e6eb] rounded-xl p-3">
+        <h3 className="text-sm font-semibold text-[#7B1034] mb-4">
+          <b>Complaint Status</b>
+        </h3>
+
+        <div className="flex flex-wrap gap-2">
+          {["Pending", "Registered", "In Progress", "Resolved"].map(
+            (step, index) => {
+              const active =
+                (index === 0 && progress >= 0) ||
+                (index === 1 && progress >= 0.33) ||
+                (index === 2 && progress >= 0.66) ||
+                (index === 3 && progress >= 0.99);
+
+              return (
+                <div
+                  key={step}
+                  className={`px-2.5 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                    active
+                      ? "text-[#7B1034] bg-[#f8f1f4]"
+                      : "text-gray-400 bg-gray-100"
+                  }`}
+                >
+                  {step}
+                </div>
+              );
+            },
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -127,7 +161,7 @@ const ComplaintDetails = () => {
   const { complaintPromise } = useLoaderData();
 
   return (
-    <div className="max-w-4xl bg-background mx-auto md:my-4 p-4 space-y-2">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 space-y-4">
       <Suspense fallback={PageSkeleton}>
         <Await resolve={complaintPromise} children={ComplaintCard} />
       </Suspense>
@@ -159,7 +193,7 @@ const PageSkeleton = (
       sx={{ bgcolor: "hsl(210, 40%, 96.1%)" }}
       animation={false}
       variant="rectangular"
-      height={208}
+      height={320}
     />
 
     <Skeleton
